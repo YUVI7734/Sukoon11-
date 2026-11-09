@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For Aradhyaa ✨</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;800&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; user-select: none; }
+        body { background-color: #050505; color: #fff; overflow: hidden; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; }
+
+        /* Dynamic Background */
+        .bg-glow { position: absolute; width: 150vw; height: 150vh; background: radial-gradient(circle, rgba(45,10,50,0.5) 0%, rgba(0,0,0,1) 60%); z-index: -1; animation: pulse 6s infinite alternate; }
+        @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
+
+        /* Screen Steps Container */
+        .step-container { display: none; flex-direction: column; align-items: center; justify-content: center; width: 90%; max-width: 400px; text-align: center; animation: fadeIn 0.8s ease-out forwards; position: absolute; }
+        .active-step { display: flex; }
+
+        @keyframes fadeIn { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes dropIn { 0% { opacity: 0; transform: translateY(-50px) scale(0.9); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+
+        /* Classy Notification Box (Glassmorphism) */
+        .glass-box { background: rgba(30, 30, 30, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 30px 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); width: 100%; position: relative; }
+        .glass-box.sorry-box { animation: dropIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(255, 71, 87, 0.3); }
+        
+        .box-title { font-weight: 800; font-size: 22px; margin-bottom: 15px; letter-spacing: 1px; }
+        .sorry-title { color: #ff4757; font-size: 26px; }
+        .box-text { font-size: 15px; line-height: 1.6; color: #e0e0e0; margin-bottom: 25px; }
+
+        /* Buttons */
+        .btn-col { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        .btn-row { display: flex; gap: 10px; width: 100%; }
+        .btn { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 12px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.2s; width: 100%; font-size: 15px; }
+        .btn:active { transform: scale(0.95); background: rgba(255,255,255,0.2); }
+        .btn-primary { background: linear-gradient(45deg, #d4af37, #ffdf00); color: #000; border: none; box-shadow: 0 5px 15px rgba(212,175,55,0.3); }
+        .btn-danger { background: rgba(255, 71, 87, 0.2); border: 1px solid rgba(255, 71, 87, 0.5); color: #ff4757; }
+
+        /* Video Player Modal */
+        #video-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 100; flex-direction: column; justify-content: center; align-items: center; }
+        video { width: 100%; max-height: 80vh; object-fit: contain; }
+        .close-vid-btn { margin-top: 20px; padding: 10px 30px; background: #fff; color: #000; font-weight: bold; border-radius: 20px; border: none; }
+
+        /* Photo Display */
+        .photo-frame { width: 100%; height: 350px; border-radius: 15px; object-fit: cover; border: 2px solid rgba(255,255,255,0.1); margin-bottom: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .photo-caption { font-family: 'Dancing Script', cursive; font-size: 28px; color: #ffdf00; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+
+        /* Hair Pic Popup */
+        .hair-pic { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; position: absolute; right: -10px; top: -30px; transform: rotate(10deg); box-shadow: 0 5px 15px rgba(0,0,0,0.5); animation: dropIn 1s; }
+
+        /* Final Typographic Layout */
+        .final-text-area { text-align: center; }
+        .final-hbd { font-family: 'Dancing Script', cursive; font-size: 40px; color: #ffdf00; margin-bottom: 5px; }
+        .final-name { font-weight: 800; font-size: 35px; letter-spacing: 2px; margin: 10px 0; background: linear-gradient(45deg, #ff7eb3, #ff758c); -webkit-background-clip: text; color: transparent; }
+        .hearts { font-size: 25px; letter-spacing: 10px; margin-top: 15px; }
+
+        /* The End Screen */
+        .coming-soon { font-family: monospace; color: #a8a8a8; font-size: 14px; letter-spacing: 2px; margin-bottom: 30px; opacity: 0; animation: fadeIn 2s 1s forwards; }
+        .the-end { font-weight: 800; font-size: 50px; letter-spacing: 8px; opacity: 0; animation: fadeIn 2s 3s forwards; }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <!-- Step 1: First Notification -->
+    <div id="step1" class="step-container active-step">
+        <div class="glass-box">
+            <div class="box-text">Btw i am thinking to mention u in stry then i think what u will think <br><br> What u say i should or not</div>
+            <div class="btn-col">
+                <button class="btn btn-primary" onclick="nextStep(1, 2)">Yes</button>
+                <button class="btn" onclick="nextStep(1, 2)">No</button>
+                <button class="btn" onclick="nextStep(1, 2)">Custom message</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 2: Diwali Reel Notification -->
+    <div id="step2" class="step-container">
+        <div class="glass-box">
+            <div class="box-text">Waise mane sucha tha tumhe diwali par yeh reel bhej du but fir himmat nhi Hui 😮‍💨</div>
+            <button class="btn btn-primary" onclick="openVideo()">See it</button>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="video-modal">
+        <video id="diwali-vid" src="diwali_reel.mp4" controls playsinline></video>
+        <button class="close-vid-btn" onclick="closeVideo()">Done</button>
+    </div>
+
+    <!-- Step 3: The Sorry Box -->
+    <div id="step3" class="step-container">
+        <div class="glass-box sorry-box">
+            <div class="box-title sorry-title">SORRY</div>
+            <div class="box-text" style="text-align: left; font-size: 14px;">
+                Aapko ek baat batani ki mane sirf ek baar aapse jhooth bola tha wo uss time aapne poucha rha "have u told anyone about me"<br><br>
+                I think u will feel awkward isliye jhooth bola tha mere dost jante the.<br>
+                And bhaut gandi Nazar maari thi 🧿<br><br>
+                Uske baad se abhi tak mane kisi ko kuch bhi nhi bataya. 😊🙂🙂<br><br>
+                Bas its over now i will feel lighter.
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="nextStep(3, 4)">Ok maaf Kiya</button>
+                <button class="btn btn-danger" onclick="noMaafiAlert()">No maafi 😡</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 4: DP Text -->
+    <div id="step4" class="step-container">
+        <div class="glass-box">
+            <div class="box-text">
+                Btw aapne jo pahle dp lagayi thi na woh jayada achi lag rhi thi toh...<br><br>
+                Ab iske aage toh Mai kya hi bolu.<br>
+                Btw these 2 pics of u r my fav.
+            </div>
+            <button class="btn btn-primary" onclick="nextStep(4, 5)">Tap to see it</button>
+        </div>
+    </div>
+
+    <!-- Step 5: Pic 1 -->
+    <div id="step5" class="step-container">
+        <img src="fav_pic1.jpg" class="photo-frame" alt="Pic 1">
+        <div class="photo-caption">So beautiful smile</div>
+        <button class="btn btn-primary" style="width: 200px;" onclick="nextStep(5, 6)">Click to next</button>
+    </div>
+
+    <!-- Step 6: Pic 2 -->
+    <div id="step6" class="step-container">
+        <img src="fav_pic2.jpg" class="photo-frame" alt="Pic 2">
+        <div class="photo-caption">Kitni pyaari aankhe</div>
+        <button class="btn btn-primary" style="width: 200px;" onclick="nextStep(6, 7)">Click to proceed</button>
+    </div>
+
+    <!-- Step 7: Hair Comment -->
+    <div id="step7" class="step-container">
+        <div class="glass-box" style="padding-top: 40px;">
+            <!-- Tumhari pic yahan pop hogi -->
+            <img src="my_hair.jpg" class="hair-pic" alt="My Hair">
+            
+            <div class="box-text">
+                Btw aaplog itne lambe baal kaise sambhal te ho?<br><br>
+                Yaha toh itne mein hi halat kharab ho gyi thi. 😂
+            </div>
+            <button class="btn btn-primary" onclick="nextStep(7, 8)">Next</button>
+        </div>
+    </div>
+
+    <!-- Step 8: Final Words -->
+    <div id="step8" class="step-container">
+        <div class="final-text-area">
+            <div class="box-text" style="font-size: 16px;">
+                At last i would like to say...<br>
+                Aap bhaut cute ho 🥰<br><br>
+                Yeh face itna shine kaise karta hai, uski tips zaroor dena thoda ✨<br><br>
+                And at last, I hope u like it.<br>
+                Enjoy ur birthday.
+            </div>
+            
+            <div class="final-hbd">Happy birthday</div>
+            <div class="final-hbd" style="font-size: 30px;">Pyari bachi</div>
+            <div class="final-name">SUKOON</div>
+            <div class="final-name" style="color: #fff; background: none; font-size: 28px;">ARADHYAA</div>
+            <div class="hearts">🫀 🫀 🫀</div>
+            
+            <button class="btn btn-primary" style="margin-top: 30px;" onclick="nextStep(8, 9)">OK</button>
+        </div>
+    </div>
+
+    <!-- Step 9: The End -->
+    <div id="step9" class="step-container">
+        <div class="coming-soon">. . . video coming soon . . .</div>
+        <div class="the-end">THE END</div>
+    </div>
+
+    <script>
+        function nextStep(current, next) {
+            document.getElementById('step' + current).classList.remove('active-step');
+            setTimeout(() => {
+                document.getElementById('step' + next).classList.add('active-step');
+            }, 300); // 300ms delay for smooth transition
+        }
+
+        // Video Handling
+        function openVideo() {
+            document.getElementById('step2').classList.remove('active-step');
+            document.getElementById('video-modal').style.display = 'flex';
+            document.getElementById('diwali-vid').play().catch(e => console.log(e));
+        }
+
+        function closeVideo() {
+            document.getElementById('diwali-vid').pause();
+            document.getElementById('video-modal').style.display = 'none';
+            document.getElementById('step3').classList.add('active-step');
+        }
+
+        // Video auto-close when finished
+        document.getElementById('diwali-vid').onended = function() {
+            closeVideo();
+        };
+
+        // Fun interaction for 'No Maafi' button
+        function noMaafiAlert() {
+            alert("Arre aise mat karo yaar, aage dekh lo ek baar! 🥺");
+            nextStep(3, 4);
+        }
+    </script>
+</body>
+  </html>
+  
