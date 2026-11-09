@@ -16,7 +16,6 @@
             padding: 15px; margin: 0;
         }
         
-        /* Dashboard Cards */
         .dashboard { 
             background: #1e1e1e; padding: 20px; 
             border-radius: 12px; margin-bottom: 20px; 
@@ -27,7 +26,6 @@
         h2 { color: #d4af37; text-align: center; margin-top: 10px; margin-bottom: 20px; font-weight: 800; letter-spacing: 1px;}
         h3 { color: #8ab4f8; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; font-size: 18px; }
         
-        /* Live Indicator */
         .live-indicator { 
             display: inline-block; width: 12px; height: 12px; 
             background: #ff4757; border-radius: 50%; 
@@ -36,7 +34,6 @@
         }
         @keyframes blink { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
 
-        /* Status Row */
         .status-row { 
             display: flex; justify-content: space-between; align-items: center; 
             padding: 12px 0; border-bottom: 1px solid #2a2a2a; font-size: 16px; 
@@ -44,39 +41,31 @@
         .status-row:last-child { border-bottom: none; }
         .live-value { font-weight: bold; color: #2ecc71; font-family: monospace; font-size: 18px; }
         
-        /* Upload Inputs */
-        .upload-row { display: flex; flex-direction: column; margin-bottom: 15px; }
-        label { margin-bottom: 5px; color: #aaa; font-size: 13px; font-weight: bold; }
-        input[type="file"], input[type="text"] { 
+        .upload-row { margin-bottom: 15px; }
+        .flex-row { display: flex; gap: 10px; align-items: center; margin-top: 5px; }
+        label { color: #aaa; font-size: 13px; font-weight: bold; }
+        input[type="file"], input[type="text"], input[type="number"] { 
             background: #2a2a2a; color: white; padding: 12px; 
             border-radius: 8px; border: 1px solid #444; width: 100%; box-sizing: border-box; 
         }
         
-        /* Buttons */
         button { 
             background: #333; color: white; border: none; 
-            padding: 15px; font-size: 16px; border-radius: 8px; 
-            margin: 5px 0; width: 100%; cursor: pointer; font-weight: bold; 
-            transition: all 0.2s; 
+            padding: 12px; font-size: 15px; border-radius: 8px; 
+            cursor: pointer; font-weight: bold; transition: all 0.2s; 
         }
         button:active { transform: scale(0.98); }
-        .primary-btn { background: linear-gradient(45deg, #d4af37, #ffdf00); color: #111; box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
-        .danger-btn { background: linear-gradient(45deg, #ff4757, #ff6b81); color: white; box-shadow: 0 0 10px rgba(255, 71, 87, 0.3); }
-        .action-btn { background: #3498db; }
-
-        /* Timer */
-        #timer-display { 
-            font-size: 32px; color: #2ecc71; text-align: center; 
-            margin: 15px 0; font-family: monospace; font-weight: bold; 
-            text-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
-        }
+        .primary-btn { background: linear-gradient(45deg, #d4af37, #ffdf00); color: #111; width: 100%; margin-top:10px; box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
+        .danger-btn { background: linear-gradient(45deg, #ff4757, #ff6b81); color: white; width: 100%; margin-top:10px; }
+        .remove-btn { background: #ff4757; color: white; padding: 12px; width: 100px; }
+        .action-btn { background: #3498db; width: 100%; margin-top:10px; }
     </style>
 </head>
 <body>
 
     <h2><span class="live-indicator"></span>SUKOON ADMIN LIVE</h2>
     
-    <!-- 1. LIVE TRACKING DASHBOARD -->
+    <!-- 1. LIVE TRACKING -->
     <div class="dashboard">
         <h3>Live Zero-Delay Report</h3>
         <div class="status-row">
@@ -91,35 +80,52 @@
 
     <!-- 2. QUOTES & AESTHETIC PANEL -->
     <div class="dashboard">
-        <h3>Quotes Page: Visuals & Music</h3>
-        <p style="font-size: 12px; color: #888; margin-bottom: 15px;">Auto-compresses images for zero-lag Firebase sync.</p>
+        <h3>Quotes Page: Visuals & Music Control</h3>
         
+        <!-- Image Upload & Remove -->
         <div class="upload-row">
             <label>Page 1 Image (Rare Spark)</label>
-            <input type="file" accept="image/*" onchange="uploadImage(event, 'pic1')">
+            <div class="flex-row">
+                <input type="file" accept="image/*" onchange="uploadImage(event, 'pic1')">
+                <button class="remove-btn" onclick="removeImage('pic1')">🗑 Remove</button>
+            </div>
         </div>
         <div class="upload-row">
             <label>Page 2 Image (Beautiful Chaos)</label>
-            <input type="file" accept="image/*" onchange="uploadImage(event, 'pic2')">
+            <div class="flex-row">
+                <input type="file" accept="image/*" onchange="uploadImage(event, 'pic2')">
+                <button class="remove-btn" onclick="removeImage('pic2')">🗑 Remove</button>
+            </div>
         </div>
         <div class="upload-row">
             <label>Page 3 Image (11:11)</label>
-            <input type="file" accept="image/*" onchange="uploadImage(event, 'pic3')">
+            <div class="flex-row">
+                <input type="file" accept="image/*" onchange="uploadImage(event, 'pic3')">
+                <button class="remove-btn" onclick="removeImage('pic3')">🗑 Remove</button>
+            </div>
         </div>
 
-        <div class="upload-row" style="margin-top: 15px;">
-            <label>Aesthetic Song URL (Direct MP3 Link)</label>
-            <input type="text" id="song-url" placeholder="Paste .mp3 link here" onchange="updateSongUrl()">
+        <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0;">
+
+        <!-- Song & Timer Config -->
+        <div class="upload-row">
+            <label>Aesthetic Song URL (MP3 Link)</label>
+            <input type="text" id="song-url" placeholder="Paste .mp3 link here">
         </div>
         
-        <!-- Music Timer -->
-        <div id="timer-display">00:00</div>
+        <div class="upload-row">
+            <label>Start Song From (in seconds) - e.g., 45 for 0:45</label>
+            <div class="flex-row">
+                <input type="number" id="song-start-time" placeholder="0" value="0">
+                <button class="action-btn" style="margin-top:0; width: 120px;" onclick="updateSongConfig()">Sync Audio</button>
+            </div>
+        </div>
         
-        <button class="primary-btn" onclick="playQuotesMusic()">▶ PLAY MUSIC (Starts Quotes Song)</button>
+        <button class="primary-btn" onclick="playQuotesMusic()">▶ PLAY MUSIC (Starts on Her Phone)</button>
         <button class="danger-btn" onclick="stopQuotesMusic()">⏸ STOP MUSIC</button>
     </div>
 
-    <!-- 3. DINO GAME OVERRIDE CONTROLS -->
+    <!-- 3. DINO GAME CONTROLS -->
     <div class="dashboard">
         <h3>Dino Game: Secret Controls</h3>
         <button onclick="sendDinoCommand('start')" class="action-btn">Force Start Game (If stuck)</button>
@@ -136,28 +142,23 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // ---------------- 1. LIVE TRACKING SYSTEM ---------------- //
-        // Listens to Dino Game State continuously
+        // ---------------- 1. LIVE TRACKING ---------------- //
         db.ref('birthday2026/liveState').on('value', (snap) => {
             const data = snap.val();
             if (data) {
                 const screenEl = document.getElementById('current-screen');
                 screenEl.innerText = data.screen;
-                
-                // Color Code her activity
                 if(data.screen.includes("Crashed") || data.screen.includes("Game Over")) {
-                    screenEl.style.color = "#ff4757"; // Red for out
+                    screenEl.style.color = "#ff4757"; 
                 } else if(data.screen.includes("Birthday")) {
-                    screenEl.style.color = "#d4af37"; // Gold for cake
+                    screenEl.style.color = "#d4af37"; 
                 } else {
-                    screenEl.style.color = "#2ecc71"; // Green for playing
+                    screenEl.style.color = "#2ecc71"; 
                 }
-
                 document.getElementById('current-score').innerText = `${data.score} / ${data.total}`;
             }
         });
 
-        // Track if she is on the Quotes Page
         db.ref('birthday2026/liveQuotesState').on('value', (snap) => {
             const state = snap.val();
             if (state) {
@@ -166,20 +167,17 @@
             }
         });
 
-        // ---------------- 2. IMAGE COMPRESSOR & UPLOADER ---------------- //
+        // ---------------- 2. IMAGE UPLOAD & REMOVE ---------------- //
         function uploadImage(event, picKey) {
             const file = event.target.files[0];
             if(!file) return;
-
-            // UI Feedback
-            event.target.style.borderColor = "#f39c12";
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_HEIGHT = 1000; // Resize to max 1000px height for fast load
+                    const MAX_HEIGHT = 1000; 
                     let width = img.width;
                     let height = img.height;
 
@@ -193,15 +191,10 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
                     
-                    // Compress to 60% quality JPEG
                     const base64Data = canvas.toDataURL('image/jpeg', 0.6); 
                     
-                    // Push to Firebase Quotes DB
                     db.ref('birthday2026/quotesData/' + picKey).set(base64Data)
-                      .then(() => {
-                          event.target.style.borderColor = "#2ecc71"; // Green on success
-                          alert(`Success! ${picKey} synced live to her phone.`);
-                      })
+                      .then(() => alert(`Success! ${picKey} synced live to her phone.`))
                       .catch(err => alert("Upload failed: " + err.message));
                 }
                 img.src = e.target.result;
@@ -209,48 +202,40 @@
             reader.readAsDataURL(file);
         }
 
-        // ---------------- 3. MUSIC & TIMER CONTROLS ---------------- //
-        function updateSongUrl() {
-            const url = document.getElementById('song-url').value;
-            db.ref('birthday2026/quotesData/songUrl').set(url)
-              .then(() => alert("Song URL pushed successfully!"));
+        // New function to remove images
+        function removeImage(picKey) {
+            db.ref('birthday2026/quotesData/' + picKey).remove()
+              .then(() => alert(`${picKey} removed from her screen!`))
+              .catch(err => alert("Failed to remove: " + err.message));
         }
 
-        let timerInterval;
-        let seconds = 0;
-
-        function updateTimerDisplay() {
-            let m = Math.floor(seconds / 60).toString().padStart(2, '0');
-            let s = (seconds % 60).toString().padStart(2, '0');
-            document.getElementById('timer-display').innerText = `${m}:${s}`;
+        // ---------------- 3. MUSIC CONFIG & CONTROLS ---------------- //
+        function updateSongConfig() {
+            const url = document.getElementById('song-url').value;
+            const startTime = document.getElementById('song-start-time').value || 0;
+            
+            if(url) {
+                db.ref('birthday2026/quotesData/songUrl').set(url);
+            }
+            db.ref('birthday2026/quotesData/songStartTime').set(Number(startTime))
+              .then(() => alert("Audio link and Start Time Synced!"));
         }
 
         function playQuotesMusic() {
             db.ref('birthday2026/liveCommandQuotes').set('play_music');
-            
-            // Start Admin Timer
-            clearInterval(timerInterval);
-            seconds = 0;
-            updateTimerDisplay();
-            timerInterval = setInterval(() => {
-                seconds++;
-                updateTimerDisplay();
-            }, 1000);
+            alert("Play command sent!");
         }
 
         function stopQuotesMusic() {
             db.ref('birthday2026/liveCommandQuotes').set('stop_music');
-            clearInterval(timerInterval); // Stop timer
         }
 
         // ---------------- 4. DINO GAME CONTROLS ---------------- //
         function sendDinoCommand(cmd) {
             db.ref('birthday2026/liveCommand').set(cmd).then(() => {
-                // Instantly reset command so it doesn't loop infinitely
                 setTimeout(() => db.ref('birthday2026/liveCommand').set('idle'), 1500);
             });
         }
     </script>
 </body>
-              </html>
-              
+</html>
