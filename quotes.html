@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For Aradhya ✨</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background-color: #ffb6c1; 
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Full Screen Backgrounds */
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1.5s ease-in-out, visibility 1.5s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Image Links */
+        #page1 { background-image: url('pic1.jpg'); }
+        #page2 { background-image: url('pic2.jpg'); }
+        #page3 { background-image: url('pic3.jpg'); }
+
+        .active-page {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Premium Glassmorphism Card */
+        .quote-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px 25px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            animation: slideUp 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 10;
+        }
+
+        .header {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Scrollable Subtext Box */
+        .subtext {
+            font-size: 16px;
+            color: #fff;
+            line-height: 1.8;
+            font-weight: 400;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            max-height: 45vh; /* Screen ka 45% height maximum */
+            overflow-y: auto; /* Lamba text hone par scroll aa jayega */
+            padding-right: 10px;
+            text-align: left; /* Reading me better flow ke liye */
+        }
+
+        /* Custom Sleek Scrollbar */
+        .subtext::-webkit-scrollbar {
+            width: 4px;
+        }
+        .subtext::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1); 
+            border-radius: 10px;
+        }
+        .subtext::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.6); 
+            border-radius: 10px;
+        }
+
+        /* Stylish Buttons */
+        .btn-container {
+            margin-top: 30px;
+            z-index: 10;
+        }
+
+        .next-btn {
+            background: linear-gradient(45deg, #ff758c 0%, #ff7eb3 100%);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-family: 'Poppins', sans-serif;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .next-btn:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* ---------------- Fast Rose Petals Animation ---------------- */
+        .petal {
+            position: absolute;
+            top: -10vh;
+            background: linear-gradient(135deg, #ff4d6d 0%, #ff7eb3 100%);
+            border-radius: 150px 0 150px 0; 
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 5;
+            animation: fall linear forwards;
+            box-shadow: 0 0 10px rgba(255, 77, 109, 0.3);
+        }
+
+        @keyframes fall {
+            0% { top: -10vh; transform: rotate(0deg) translateX(0); }
+            100% { top: 110vh; transform: rotate(360deg) translateX(50px); }
+        }
+    </style>
+</head>
+<body onclick="playMusic()">
+
+    <!-- Aesthetic Song Player -->
+    <audio id="bg-music" loop>
+        <source src="YOUR_SONG_LINK_HERE.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Page 1 -->
+    <div id="page1" class="page active-page">
+        <div class="quote-box">
+            <div class="header">To the Rare Spark. ✨</div>
+            <div class="subtext">"In a world chasing loud trends and temporary moments, you carry a quiet, beautiful magic. Never lose that calm energy and that genuine smile. The world looks better with it. Happy Birthday, Aradhya."</div>
+        </div>
+        <div class="btn-container">
+            <button class="next-btn" onclick="nextPage(1)">Next ✨</button>
+        </div>
+    </div>
+
+    <!-- Page 2 -->
+    <div id="page2" class="page">
+        <div class="quote-box">
+            <div class="header">Celebrating the Best Kind of Chaos. 🤍</div>
+            <div class="subtext">"Most people just add noise to the world, but you bring a vibe that feels like absolute peace. Here’s to the girl who effortlessly makes everything around her a little more beautiful. Happy Birthday."</div>
+        </div>
+        <div class="btn-container">
+            <button class="next-btn" onclick="nextPage(2)">Next 🤍</button>
+        </div>
+    </div>
+
+    <!-- Page 3 -->
+    <div id="page3" class="page">
+        <div class="quote-box">
+            <div class="header">11:11 ✨</div>
+            <div class="subtext">"1:11 AM was just a reminder, but the main wish had to land at exactly 11:11 AM on 11/11. The whole world waits for 11:11 to make a wish, but you are literally the 11/11 girl—God’s favorite. Some people don't need to try too hard; they just make the timeline better by existing in it, and you're definitely one of them. Never let anything fade your smile. It belongs to you, but seeing it randomly makes other people's days better too. Have the happiest birthday, Aradhya."</div>
+        </div>
+        <div class="btn-container">
+            <a href="insta.html" class="next-btn">Go ahead 🌹</a>
+        </div>
+    </div>
+
+    <script>
+        // Play music on first interaction (Screen tap)
+        let musicStarted = false;
+        function playMusic() {
+            if (!musicStarted) {
+                document.getElementById('bg-music').play().catch(() => console.log("Audio prevented"));
+                musicStarted = true;
+            }
+        }
+
+        // Page Navigation Logic
+        function nextPage(currentPageIndex) {
+            const current = document.getElementById('page' + currentPageIndex);
+            const next = document.getElementById('page' + (currentPageIndex + 1));
+            
+            current.classList.remove('active-page');
+            
+            setTimeout(() => {
+                next.classList.add('active-page');
+            }, 800); 
+        }
+
+        // Fast Falling Rose Petals Logic
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            
+            const size = Math.random() * 15 + 10; 
+            petal.style.width = size + 'px';
+            petal.style.height = size + 'px';
+            petal.style.left = Math.random() * 100 + 'vw';
+            
+            // Speed badha di hai: 3 se 5 seconds ke andar petal poori screen cross karega
+            petal.style.animationDuration = Math.random() * 2 + 3 + 's'; 
+            
+            document.body.appendChild(petal);
+            
+            // Remove fast to keep memory clean
+            setTimeout(() => {
+                petal.remove();
+            }, 6000);
+        }
+
+        // Drop petals rapidly (every 250ms)
+        setInterval(createPetal, 250);
+    </script>
+</body>
+  </html>
+  
