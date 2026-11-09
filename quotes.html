@@ -5,9 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>For Aradhya ✨</title>
     
+    <!-- Firebase Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;500&display=swap');
         
+        /* ---------------- Global Reset ---------------- */
         * {
             margin: 0;
             padding: 0;
@@ -16,14 +21,14 @@
         }
 
         body {
-            background-color: #ffb6c1; 
+            background-color: #111; /* Dark background before images load */
             overflow: hidden;
             height: 100vh;
             width: 100vw;
             font-family: 'Poppins', sans-serif;
         }
 
-        /* Full Screen Backgrounds */
+        /* ---------------- Full Screen Backgrounds ---------------- */
         .page {
             position: absolute;
             top: 0;
@@ -42,28 +47,23 @@
             padding: 20px;
         }
 
-        /* Image Links */
-        #page1 { background-image: url('pic1.jpg'); }
-        #page2 { background-image: url('pic2.jpg'); }
-        #page3 { background-image: url('pic3.jpg'); }
-
         .active-page {
             opacity: 1;
             visibility: visible;
         }
 
-        /* Premium Glassmorphism Card */
+        /* ---------------- Premium Glassmorphism Card ---------------- */
         .quote-box {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
             padding: 40px 25px;
             text-align: center;
             width: 90%;
             max-width: 400px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             animation: slideUp 1.5s cubic-bezier(0.25, 1, 0.5, 1);
             z-index: 10;
         }
@@ -73,36 +73,38 @@
             font-size: 26px;
             color: #fff;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
         }
 
-        /* Scrollable Subtext Box */
+        /* ---------------- Scrollable Subtext Box ---------------- */
         .subtext {
             font-size: 16px;
-            color: #fff;
+            color: #f0f0f0;
             line-height: 1.8;
             font-weight: 400;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-            max-height: 45vh; /* Screen ka 45% height maximum */
-            overflow-y: auto; /* Lamba text hone par scroll aa jayega */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+            max-height: 45vh; /* Prevents text from going off screen */
+            overflow-y: auto; /* Adds scroll if text is too long */
             padding-right: 10px;
-            text-align: left; /* Reading me better flow ke liye */
+            text-align: left;
         }
 
         /* Custom Sleek Scrollbar */
         .subtext::-webkit-scrollbar {
             width: 4px;
         }
+        
         .subtext::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1); 
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
         }
+        
         .subtext::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.6); 
+            background: rgba(255, 255, 255, 0.6);
             border-radius: 10px;
         }
 
-        /* Stylish Buttons */
+        /* ---------------- Stylish Buttons ---------------- */
         .btn-container {
             margin-top: 30px;
             z-index: 10;
@@ -119,9 +121,9 @@
             box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
             cursor: pointer;
             transition: transform 0.2s;
-            font-family: 'Poppins', sans-serif;
             text-decoration: none;
             display: inline-block;
+            font-family: 'Poppins', sans-serif;
         }
 
         .next-btn:active {
@@ -138,7 +140,7 @@
             position: absolute;
             top: -10vh;
             background: linear-gradient(135deg, #ff4d6d 0%, #ff7eb3 100%);
-            border-radius: 150px 0 150px 0; 
+            border-radius: 150px 0 150px 0;
             opacity: 0.8;
             pointer-events: none;
             z-index: 5;
@@ -152,12 +154,10 @@
         }
     </style>
 </head>
-<body onclick="playMusic()">
+<body>
 
     <!-- Aesthetic Song Player -->
-    <audio id="bg-music" loop>
-        <source src="YOUR_SONG_LINK_HERE.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bg-music" loop></audio>
 
     <!-- Page 1 -->
     <div id="page1" class="page active-page">
@@ -188,56 +188,105 @@
             <div class="subtext">"1:11 AM was just a reminder, but the main wish had to land at exactly 11:11 AM on 11/11. The whole world waits for 11:11 to make a wish, but you are literally the 11/11 girl—God’s favorite. Some people don't need to try too hard; they just make the timeline better by existing in it, and you're definitely one of them. Never let anything fade your smile. It belongs to you, but seeing it randomly makes other people's days better too. Have the happiest birthday, Aradhya."</div>
         </div>
         <div class="btn-container">
-            <a href="insta.html" class="next-btn">Go ahead 🌹</a>
+            <button class="next-btn" onclick="goAhead()">Go ahead 🌹</button>
         </div>
     </div>
 
     <script>
-        // Play music on first interaction (Screen tap)
-        let musicStarted = false;
-        function playMusic() {
-            if (!musicStarted) {
-                document.getElementById('bg-music').play().catch(() => console.log("Audio prevented"));
-                musicStarted = true;
-            }
-        }
+        // ---------------- Firebase Setup ---------------- //
+        const firebaseConfig = {
+            databaseURL: "https://sukoon11-default-rtdb.firebaseio.com/",
+            projectId: "sukoon11"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const music = document.getElementById('bg-music');
 
-        // Page Navigation Logic
+        // ---------------- Live Data Listener ---------------- //
+        // Fetches images and song URL dynamically from Admin Panel
+        db.ref('birthday2026/quotesData').on('value', (snap) => {
+            const data = snap.val();
+            if (!data) return;
+            
+            if (data.pic1) {
+                document.getElementById('page1').style.backgroundImage = `url(${data.pic1})`;
+            }
+            if (data.pic2) {
+                document.getElementById('page2').style.backgroundImage = `url(${data.pic2})`;
+            }
+            if (data.pic3) {
+                document.getElementById('page3').style.backgroundImage = `url(${data.pic3})`;
+            }
+            if (data.songUrl && music.src !== data.songUrl) {
+                music.src = data.songUrl;
+            }
+        });
+
+        // ---------------- Live Command Listener ---------------- //
+        // Listens for Play/Stop commands from Admin
+        db.ref('birthday2026/liveCommandQuotes').on('value', (snap) => {
+            const cmd = snap.val();
+            if (cmd === 'play_music') {
+                music.play().catch(e => console.log("Audio playback prevented by browser:", e));
+            }
+            if (cmd === 'stop_music') {
+                music.pause();
+            }
+        });
+
+        // ---------------- Page Navigation Logic ---------------- //
         function nextPage(currentPageIndex) {
             const current = document.getElementById('page' + currentPageIndex);
             const next = document.getElementById('page' + (currentPageIndex + 1));
             
+            // Fade out current page
             current.classList.remove('active-page');
             
+            // Wait for fade out, then show next page
             setTimeout(() => {
                 next.classList.add('active-page');
             }, 800); 
         }
 
-        // Fast Falling Rose Petals Logic
+        // ---------------- Final Button Logic ---------------- //
+        function goAhead() {
+            // Stop music before navigating to the next page
+            music.pause();
+            
+            // Sync status to admin dashboard that music has stopped
+            db.ref('birthday2026/liveCommandQuotes').set('stop_music'); 
+            
+            // Navigate to Instagram Replica page
+            window.location.href = 'insta.html';
+        }
+
+        // ---------------- Fast Falling Rose Petals Logic ---------------- //
         function createPetal() {
             const petal = document.createElement('div');
             petal.classList.add('petal');
             
+            // Randomize size between 10px and 25px
             const size = Math.random() * 15 + 10; 
             petal.style.width = size + 'px';
             petal.style.height = size + 'px';
+            
+            // Randomize horizontal starting position
             petal.style.left = Math.random() * 100 + 'vw';
             
-            // Speed badha di hai: 3 se 5 seconds ke andar petal poori screen cross karega
+            // Speed: Falls within 3 to 5 seconds
             petal.style.animationDuration = Math.random() * 2 + 3 + 's'; 
             
             document.body.appendChild(petal);
             
-            // Remove fast to keep memory clean
+            // Remove petal after it falls to keep DOM clean and prevent lag
             setTimeout(() => {
                 petal.remove();
             }, 6000);
         }
 
-        // Drop petals rapidly (every 250ms)
+        // Drop a petal rapidly (every 250ms)
         setInterval(createPetal, 250);
     </script>
 </body>
-  </html>
-  
+</html>
