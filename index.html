@@ -1,1 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>No internet connection</title>
+    
+    <!-- Firebase Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        
+        /* ---------------- Global Reset ---------------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: #202124;
+            color: #9aa0a6;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ---------------- Fake Chrome Error Page ---------------- */
+        #chrome-error {
+            padding: 20px 24px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .dino-icon {
+            font-size: 50px;
+            margin-top: 10vh;
+            margin-bottom: 20px;
+            color: #9aa0a6;
+            filter: grayscale(100%);
+        }
+
+        h1 {
+            color: #e8eaed;
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        p, li {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        ul {
+            margin-top: 10px;
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .error-code {
+            font-size: 12px;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        /* ---------------- Game Area ---------------- */
+        #game-area {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            background-color: #202124;
+            border-bottom: 2px solid #5f6368;
+            overflow: hidden;
+        }
+
+        /* Sentence Board at the Top */
+        #sentence-board {
+            position: absolute;
+            top: 10vh;
+            width: 100%;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 4px;
+            text-shadow: 0 0 10px #d4af37, 0 0 20px #ffdf00;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 0 20px;
+        }
+
+        .collected-char {
+            margin: 0 2px;
+            animation: popText 0.5s ease-out;
+        }
+
+        .space {
+            width: 15px; /* Space between words */
+        }
+
+        #dino {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            bottom: 20px;
+            left: 50px;
+            font-size: 40px;
+            line-height: 50px;
+            z-index: 10;
+        }
+
+        #obstacle {
+            position: absolute;
+            bottom: 20px;
+            left: 100vw;
+            font-size: 35px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px #8ab4f8;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Game Animations */
+        .jump {
+            animation: jumpAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes jumpAnim {
+            0% { bottom: 20px; }
+            40% { bottom: 150px; }
+            50% { bottom: 150px; }
+            60% { bottom: 150px; }
+            100% { bottom: 20px; }
+        }
+
+        .slide {
+            animation: slideAnim 1.8s linear forwards;
+        }
+
+        @keyframes slideAnim {
+            0% { left: 100vw; }
+            100% { left: -50px; }
+        }
+
+        .floating-letter {
+            position: absolute;
+            bottom: 20px;
+            left: 50px;
+            font-size: 35px;
+            font-weight: bold;
+            color: #d4af37;
+            text-shadow: 0 0 15px #ffdf00;
+            font-family: 'Poppins', sans-serif;
+            animation: floatUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(0, -60vh) scale(1.5); opacity: 0; }
+        }
+
+        @keyframes popText {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ---------------- Game Over Screen ---------------- */
+        #game-over {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            z-index: 20;
+            background: rgba(0,0,0,0.8);
+            padding: 20px 40px;
+            border-radius: 12px;
+            border: 1px solid #ff4757;
+        }
+
+        #game-over h2 {
+            color: #ff4757;
+            margin-bottom: 10px;
+            font-size: 30px;
+        }
+
+        #game-over p {
+            color: #fff;
+            font-size: 16px;
+        }
+
+        /* ---------------- Premium Birthday Screen ---------------- */
+        #birthday-screen {
+            display: none;
+            height: 100vh;
+            width: 100%;
+            background: radial-gradient(circle, #2a2d34 0%, #111 100%);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            opacity: 0;
+            transition: opacity 2s ease-in;
+        }
+
+        .number-17 {
+            font-size: 120px;
+            font-weight: 800;
+            color: transparent;
+            -webkit-text-stroke: 2px #d4af37;
+            background: linear-gradient(45deg, #d4af37, #ffdf00, #d4af37);
+            -webkit-background-clip: text;
+            animation: glowText 2s ease-in-out infinite alternate, popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cake-emoji {
+            font-size: 80px;
+            margin: 20px 0;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .wish-text {
+            font-size: 28px;
+            color: #fff;
+            font-weight: 600;
+            margin-top: 20px;
+            animation: slideUp 1.5s ease-out;
+        }
+
+        .sukoon-text {
+            color: #d4af37;
+            font-size: 36px;
+            font-style: italic;
+        }
+
+        .continue-btn {
+            margin-top: 40px;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #111;
+            background: linear-gradient(45deg, #d4af37, #ffdf00);
+            border: none;
+            border-radius: 30px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            cursor: pointer;
+            animation: slideUp 2s ease-out;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            display: inline-block;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes glowText {
+            from { text-shadow: 0 0 10px rgba(212, 175, 55, 0.2); }
+            to { text-shadow: 0 0 30px rgba(212, 175, 55, 0.8); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body onclick="handleTap()">
+
+    <!-- Audio Element -->
+    <audio id="bg-music" loop>
+        <source src="YOUR_MP3_LINK_HERE.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Chrome Error View -->
+    <div id="chrome-error">
+        <div class="dino-icon">🦖</div>
+        <h1>Tap the dino to play</h1>
+        <p>Try:</p>
+        <ul>
+            <li>Turning off aeroplane mode</li>
+            <li>Turning on mobile data or Wi-Fi</li>
+            <li>Checking the signal in your area</li>
+        </ul>
+        <div class="error-code">ERR_INTERNET_DISCONNECTED</div>
+    </div>
+
+    <!-- Dino Game View -->
+    <div id="game-area">
+        <div id="sentence-board"></div>
+        <div id="dino">🦖</div>
+        <div id="obstacle">H</div>
+        
+        <div id="game-over">
+            <h2>Oops!</h2>
+            <p>Tap anywhere to try again</p>
+        </div>
+    </div>
+
+    <!-- 17th Birthday Surprise View -->
+    <div id="birthday-screen">
+        <div class="number-17">17</div>
+        <div class="cake-emoji">🎂✨</div>
+        <div class="wish-text">Happy Birthday <br><span class="sukoon-text">Sukoon ❤️❤️❤️</span></div>
+        <a href="quotes.html" class="continue-btn">Continue Ahead ✨</a>
+    </div>
+
+    <script>
+        // ---------------- Firebase Setup ---------------- //
+        const firebaseConfig = {
+            databaseURL: "https://sukoon11-default-rtdb.firebaseio.com/",
+            projectId: "sukoon11"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        
+        // Push current status to Admin Dashboard
+        function syncState(viewName) {
+            db.ref('birthday2026/liveState').set({
+                screen: viewName,
+                score: currentLetterIdx,
+                total: 17
+            });
+        }
+
+        // Listen for Admin manual triggers
+        db.ref('birthday2026/liveCommand').on('value', (snap) => {
+            const cmd = snap.val();
+            if (cmd === 'trigger_birthday') {
+                triggerBirthdayScreen();
+            }
+            if (cmd === 'reset') {
+                location.reload();
+            }
+            if (cmd === 'start' && gameState === 0) {
+                startGame();
+            }
+        });
+
+        // ---------------- Game Variables ---------------- //
+        let gameState = 0; // 0 = chrome error, 1 = playing, 2 = game over, 3 = birthday screen
+        let currentLetterIdx = 0;
+        // Exactly 17 letters forming "HAPPY BIRTHDAY MAAM"
+        const letters = ['H','A','P','P','Y','B','I','R','T','H','D','A','Y','M','A','A','M']; 
+        
+        const chromeError = document.getElementById('chrome-error');
+        const gameArea = document.getElementById('game-area');
+        const birthdayScreen = document.getElementById('birthday-screen');
+        const dino = document.getElementById('dino');
+        const obstacle = document.getElementById('obstacle');
+        const sentenceBoard = document.getElementById('sentence-board');
+        const gameOverScreen = document.getElementById('game-over');
+        const music = document.getElementById('bg-music');
+        let checkCollision;
+
+        // Initialize sync
+        syncState("Chrome Error Page");
+
+        // ---------------- Game Logic ---------------- //
+        function handleTap() {
+            if (gameState === 0) {
+                startGame();
+            } else if (gameState === 1) {
+                jump();
+            } else if (gameState === 2) {
+                restartGame();
+            }
+        }
+
+        function startGame() {
+            chromeError.style.display = 'none';
+            gameArea.style.display = 'block';
+            music.play().catch(e => console.log("Audio auto-play prevented"));
+            
+            gameState = 1;
+            syncState("Playing Game");
+            spawnObstacle();
+            startCollisionDetection();
+        }
+
+        function spawnObstacle() {
+            // Check if all 17 jumps are done
+            if(currentLetterIdx >= letters.length) {
+                setTimeout(triggerBirthdayScreen, 1000);
+                return;
+            }
+            
+            obstacle.innerText = letters[currentLetterIdx];
+            obstacle.classList.remove('slide');
+            void obstacle.offsetWidth; // Trigger DOM reflow to restart animation
+            obstacle.classList.add('slide');
+            obstacle.style.animationPlayState = 'running';
+        }
+
+        function jump() {
+            if (dino.classList != "jump" && gameState === 1) {
+                dino.classList.add("jump");
+                setTimeout(() => { 
+                    dino.classList.remove("jump"); 
+                }, 600);
+            }
+        }
+
+        function startCollisionDetection() {
+            checkCollision = setInterval(() => {
+                if(gameState !== 1) return;
+                
+                let dinoBottom = parseInt(window.getComputedStyle(dino).getPropertyValue("bottom"));
+                let obsLeft = parseInt(window.getComputedStyle(obstacle).getPropertyValue("left"));
+                
+                // Forgiving Collision: Only triggers if dead center and dino hasn't jumped enough
+                if (obsLeft > 60 && obsLeft < 75 && dinoBottom <= 30) {
+                    crash();
+                }
+            }, 10);
+        }
+
+        function crash() {
+            gameState = 2; // Game Over state
+            syncState("Game Over (Crashed)");
+            obstacle.style.animationPlayState = 'paused';
+            gameOverScreen.style.display = 'block';
+        }
+
+        function restartGame() {
+            gameOverScreen.style.display = 'none';
+            currentLetterIdx = 0;
+            sentenceBoard.innerHTML = ''; // Clear collected letters
+            gameState = 1;
+            syncState("Playing Game (Restarted)");
+            dino.classList.remove("jump");
+            spawnObstacle();
+        }
+
+        // When a letter safely crosses off the screen
+        obstacle.addEventListener('animationend', () => {
+            if (gameState === 1) {
+                animateLetter(letters[currentLetterIdx]);
+                currentLetterIdx++;
+                syncState("Playing Game"); // Sync updated score to admin
+                spawnObstacle();
+            }
+        });
+
+        // ---------------- Animations ---------------- //
+        function animateLetter(char) {
+            let floatEl = document.createElement('div');
+            floatEl.innerText = char;
+            floatEl.className = 'floating-letter';
+            gameArea.appendChild(floatEl);
+
+            // Once the float animation ends, add to the top board
+            setTimeout(() => {
+                floatEl.remove();
+                
+                let span = document.createElement('span');
+                span.innerText = char;
+                span.className = 'collected-char';
+                sentenceBoard.appendChild(span);
+
+                // Add word breaks after 'HAPPY' and 'BIRTHDAY'
+                if(currentLetterIdx === 5 || currentLetterIdx === 13) {
+                    let space = document.createElement('div');
+                    space.className = 'space';
+                    sentenceBoard.appendChild(space);
+                }
+            }, 1000);
+        }
+
+        function triggerBirthdayScreen() {
+            gameState = 3;
+            syncState("Birthday Screen 17!");
+            clearInterval(checkCollision);
+            gameArea.style.display = 'none';
+            birthdayScreen.style.display = 'flex';
+            
+            // Fade in effect
+            setTimeout(() => { 
+                birthdayScreen.style.opacity = 1; 
+            }, 100);
+        }
+    </script>
+</body>
+  </html>
 
