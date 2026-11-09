@@ -3,507 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>No internet connection</title>
+    <title>Instagram</title>
     
     <!-- Firebase Libraries -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; user-select: none; }
+        body { background-color: #000; color: #fff; overflow-x: hidden; }
+
+        /* --- Modals & Popups --- */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; transition: 0.3s; }
+        .popup-box { background: #1c1c1e; border-radius: 15px; padding: 30px 20px; width: 80%; text-align: center; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .popup-text { font-size: 16px; margin-bottom: 20px; line-height: 1.5; color: #f0f0f0; }
+        .popup-btn { background: #0095f6; color: #fff; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 600; font-size: 15px; cursor: pointer; width: 100%; }
         
-        /* ---------------- Global Reset ---------------- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
-            user-select: none;
-        }
+        #instruction-banner { position: fixed; top: -60px; left: 0; width: 100%; background: rgba(38, 38, 38, 0.95); color: #fff; text-align: center; padding: 15px; font-weight: 600; font-size: 14px; z-index: 900; transition: top 0.5s ease; border-bottom: 1px solid #333; }
 
-        body {
-            background-color: #202124;
-            color: #9aa0a6;
-            height: 100vh;
-            overflow: hidden;
-        }
+        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* ---------------- Fake Chrome Error Page ---------------- */
-        #chrome-error {
-            padding: 20px 24px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-        }
+        /* --- Insta Header --- */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #262626; position: sticky; top: 0; background: #000; z-index: 100; }
+        .header-left { display: flex; align-items: center; gap: 15px; font-size: 20px; font-weight: 700; }
+        .header-right { display: flex; gap: 20px; font-size: 22px; }
 
-        .dino-icon {
-            font-size: 50px;
-            margin-top: 10vh;
-            margin-bottom: 20px;
-            color: #9aa0a6;
-            filter: grayscale(100%);
-        }
+        /* --- Profile Section --- */
+        .profile-section { padding: 15px; }
+        .stats-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+        .profile-pic-container { position: relative; width: 85px; height: 85px; border-radius: 50%; padding: 3px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+        .profile-pic { width: 100%; height: 100%; border-radius: 50%; border: 3px solid #000; background: #333 url('aradhya_dp_placeholder.jpg') center/cover; }
+        .stats { display: flex; gap: 30px; text-align: center; flex: 1; justify-content: center; }
+        .stat-box .count { font-weight: 700; font-size: 16px; margin-bottom: 3px; }
+        .stat-box .label { font-size: 13px; color: #a8a8a8; }
 
-        h1 {
-            color: #e8eaed;
-            font-size: 24px;
-            font-weight: 500;
-            margin-bottom: 15px;
-        }
+        /* --- Bio Section --- */
+        .bio { font-size: 14px; line-height: 1.4; margin-bottom: 15px; }
+        .bio-name { font-weight: 600; margin-bottom: 2px; }
+        .followed-by { font-size: 12px; color: #a8a8a8; display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+        .mutual-pics { display: flex; }
+        .mutual-pics div { width: 24px; height: 24px; border-radius: 50%; background: #444; border: 2px solid #000; margin-left: -10px; }
+        .mutual-pics div:first-child { margin-left: 0; }
 
-        p, li {
-            font-size: 14px;
-            line-height: 1.6;
-        }
+        /* --- Action Buttons --- */
+        .action-btns { display: flex; gap: 8px; margin-bottom: 20px; }
+        .btn { flex: 1; background: #262626; color: #fff; font-weight: 600; font-size: 14px; padding: 8px; border-radius: 8px; border: none; text-align: center; }
+        .btn-small { width: 40px; flex: none; }
 
-        ul {
-            margin-top: 10px;
-            margin-left: 20px;
-            margin-bottom: 20px;
-        }
+        /* --- Highlights --- */
+        .highlights-container { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+        .highlight { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; }
+        .hl-ring { width: 65px; height: 65px; border-radius: 50%; padding: 2px; border: 1px solid #555; display: flex; justify-content: center; align-items: center; }
+        .hl-pic { width: 100%; height: 100%; border-radius: 50%; background: #333 center/cover; border: 2px solid #000; }
+        .hl-name { font-size: 12px; }
+        
+        /* Placeholder Images for highlights */
+        #h1 .hl-pic { background-color: #ff7eb3; }
+        #h2 .hl-pic { background-color: #8ab4f8; }
+        #h3 .hl-pic { background-color: #2ecc71; }
 
-        .error-code {
-            font-size: 12px;
-            margin-bottom: 15px;
-            letter-spacing: 0.5px;
-        }
+        /* --- Grid Tabs & Posts --- */
+        .tabs { display: flex; border-top: 1px solid #262626; margin-top: 10px; }
+        .tab { flex: 1; text-align: center; padding: 12px 0; border-bottom: 1px solid transparent; color: #888; }
+        .tab.active { border-bottom: 1px solid #fff; color: #fff; }
+        
+        .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 20px; text-align: center; }
+        .empty-circle { width: 90px; height: 90px; border: 2px solid #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; font-size: 40px; }
+        .empty-state h2 { font-size: 22px; font-weight: 800; }
 
-        /* ---------------- Game Area ---------------- */
-        #game-area {
-            display: none;
-            width: 100%;
-            height: 100vh;
-            position: relative;
-            background-color: #202124;
-            overflow: hidden;
-        }
-
-        /* Ground Line */
-        #game-area::after {
-            content: '';
-            position: absolute;
-            bottom: 100px; /* Upar shift kiya */
-            left: 0;
-            width: 100%;
-            border-bottom: 2px solid #5f6368;
-        }
-
-        /* Sentence Board at the Top */
-        #sentence-board {
-            position: absolute;
-            top: 10vh;
-            width: 100%;
-            text-align: center;
-            font-size: 28px;
-            font-weight: 800;
-            color: #fff;
-            letter-spacing: 4px;
-            text-shadow: 0 0 10px #d4af37, 0 0 20px #ffdf00;
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            padding: 0 20px;
-        }
-
-        .collected-char {
-            margin: 0 2px;
-            animation: popText 0.5s ease-out;
-        }
-
-        .space {
-            width: 15px;
-        }
-
-        #dino {
-            width: 50px;
-            height: 50px;
-            position: absolute;
-            bottom: 100px; /* Mobile navigation bar se bachane ke liye upar shift kiya */
-            left: 50px;
-            font-size: 40px;
-            line-height: 50px;
-            z-index: 10;
-        }
-
-        #obstacle {
-            position: absolute;
-            bottom: 100px; /* Same ground level as dino */
-            left: 100vw;
-            font-size: 35px;
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 0 0 10px #8ab4f8;
-            font-family: 'Poppins', sans-serif;
-            z-index: 10;
-        }
-
-        /* Game Animations */
-        .jump {
-            animation: jumpAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes jumpAnim {
-            0% { bottom: 100px; }
-            40% { bottom: 250px; }
-            50% { bottom: 250px; }
-            60% { bottom: 250px; }
-            100% { bottom: 100px; }
-        }
-
-        .slide {
-            animation: slideAnim 1.8s linear forwards;
-        }
-
-        @keyframes slideAnim {
-            0% { left: 100vw; }
-            100% { left: -50px; }
-        }
-
-        .floating-letter {
-            position: absolute;
-            bottom: 100px;
-            left: 50px;
-            font-size: 35px;
-            font-weight: bold;
-            color: #d4af37;
-            text-shadow: 0 0 15px #ffdf00;
-            font-family: 'Poppins', sans-serif;
-            animation: floatUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-            z-index: 15;
-        }
-
-        @keyframes floatUp {
-            0% { transform: translate(0, 0) scale(1); opacity: 1; }
-            100% { transform: translate(0, -60vh) scale(1.5); opacity: 0; }
-        }
-
-        @keyframes popText {
-            0% { transform: scale(0); opacity: 0; }
-            80% { transform: scale(1.2); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* ---------------- Game Over Screen ---------------- */
-        #game-over {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            font-family: 'Poppins', sans-serif;
-            z-index: 20;
-            background: rgba(0,0,0,0.8);
-            padding: 20px 40px;
-            border-radius: 12px;
-            border: 1px solid #ff4757;
-        }
-
-        #game-over h2 {
-            color: #ff4757;
-            margin-bottom: 10px;
-            font-size: 30px;
-        }
-
-        #game-over p {
-            color: #fff;
-            font-size: 16px;
-        }
-
-        /* ---------------- Premium Birthday Screen ---------------- */
-        #birthday-screen {
-            display: none;
-            height: 100vh;
-            width: 100%;
-            background: radial-gradient(circle, #2a2d34 0%, #111 100%);
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            font-family: 'Poppins', sans-serif;
-            opacity: 0;
-            transition: opacity 2s ease-in;
-        }
-
-        .number-17 {
-            font-size: 120px;
-            font-weight: 800;
-            color: transparent;
-            -webkit-text-stroke: 2px #d4af37;
-            background: linear-gradient(45deg, #d4af37, #ffdf00, #d4af37);
-            -webkit-background-clip: text;
-            animation: glowText 2s ease-in-out infinite alternate, popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .cake-emoji {
-            font-size: 80px;
-            margin: 20px 0;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .wish-text {
-            font-size: 28px;
-            color: #fff;
-            font-weight: 600;
-            margin-top: 20px;
-            animation: slideUp 1.5s ease-out;
-        }
-
-        .sukoon-text {
-            color: #d4af37;
-            font-size: 36px;
-            font-style: italic;
-        }
-
-        .continue-btn {
-            margin-top: 40px;
-            padding: 15px 40px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #111;
-            background: linear-gradient(45deg, #d4af37, #ffdf00);
-            border: none;
-            border-radius: 30px;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
-            cursor: pointer;
-            animation: slideUp 2s ease-out;
-            text-decoration: none;
-            font-family: 'Poppins', sans-serif;
-            display: inline-block;
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        @keyframes glowText {
-            from { text-shadow: 0 0 10px rgba(212, 175, 55, 0.2); }
-            to { text-shadow: 0 0 30px rgba(212, 175, 55, 0.8); }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
+        /* --- Highlight Fullscreen Viewer --- */
+        #highlight-viewer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; display: none; flex-direction: column; }
+        .viewer-header { display: flex; justify-content: space-between; padding: 15px; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); position: absolute; width: 100%; z-index: 10; }
+        .close-viewer { color: #fff; font-size: 24px; cursor: pointer; }
+        .content-area { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; }
+        
+        /* --- Final Button --- */
+        #move-further-btn { position: fixed; bottom: -80px; left: 50%; transform: translateX(-50%); background: linear-gradient(45deg, #d4af37, #ffdf00); color: #000; font-weight: 800; font-size: 16px; padding: 15px 40px; border-radius: 30px; z-index: 900; transition: 0.5s; text-decoration: none; box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); white-space: nowrap; }
     </style>
 </head>
-<body onclick="handleTap()">
+<body>
 
-    <!-- Audio Element -->
-    <audio id="bg-music" loop>
-        <source src="YOUR_MP3_LINK_HERE.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- Chrome Error View -->
-    <div id="chrome-error">
-        <div class="dino-icon">🦖</div>
-        <h1>Tap the dino to play</h1>
-        <p>Try:</p>
-        <ul>
-            <li>Turning off aeroplane mode</li>
-            <li>Turning on mobile data or Wi-Fi</li>
-            <li>Checking the signal in your area</li>
-        </ul>
-        <div class="error-code">ERR_INTERNET_DISCONNECTED</div>
-    </div>
-
-    <!-- Dino Game View -->
-    <div id="game-area">
-        <div id="sentence-board"></div>
-        <div id="dino">🦖</div>
-        <div id="obstacle">H</div>
-        
-        <div id="game-over">
-            <h2>Oops!</h2>
-            <p>Tap anywhere to try again</p>
+    <!-- 1. Initial Apology Popup -->
+    <div id="apology-modal" class="overlay">
+        <div class="popup-box">
+            <div class="popup-text">Sorry as I have used some of ur pics without ur permission 😅🤍</div>
+            <button class="popup-btn" onclick="startInstaExperience()">It's okay</button>
         </div>
     </div>
 
-    <!-- 17th Birthday Surprise View -->
-    <div id="birthday-screen">
-        <div class="number-17">17</div>
-        <div class="cake-emoji">🎂✨</div>
-        <div class="wish-text">Happy Birthday <br><span class="sukoon-text">Sukoon ❤️❤️❤️</span></div>
-        <a href="quotes.html" class="continue-btn">Continue Ahead ✨</a>
+    <!-- Step Guidance Popup -->
+    <div id="step-modal" class="overlay" style="display: none;">
+        <div class="popup-box">
+            <div class="popup-text" id="step-text">Now click on the 2nd highlight</div>
+            <button class="popup-btn" onclick="document.getElementById('step-modal').style.display='none'">Okay</button>
+        </div>
+    </div>
+
+    <!-- Instruction Banner -->
+    <div id="instruction-banner">Click on the highlights to go further 👇</div>
+
+    <!-- INSTA MAIN UI -->
+    <div class="header">
+        <div class="header-left">
+            <span>←</span>
+            <span>aradhyaa._shankhdhar</span>
+        </div>
+        <div class="header-right">
+            <span>🔔</span>
+            <span>⋮</span>
+        </div>
+    </div>
+
+    <div class="profile-section">
+        <div class="stats-row">
+            <div class="profile-pic-container">
+                <div class="profile-pic"></div>
+            </div>
+            <div class="stats">
+                <div class="stat-box"><div class="count">0</div><div class="label">posts</div></div>
+                <div class="stat-box"><div class="count">271</div><div class="label">followers</div></div>
+                <div class="stat-box"><div class="count">294</div><div class="label">following</div></div>
+            </div>
+        </div>
+
+        <div class="bio">
+            <div class="bio-name">~Aradhyaa she/her</div>
+            I'm such a fan of me 🪬⭐<br>
+            ~11 🪄🧸🕯️
+            <div class="followed-by">
+                <div class="mutual-pics">
+                    <div></div><div></div><div></div>
+                </div>
+                Followed by divyanshhhhhhh_.-._,<br>_iam_maniac_ and 8 others
+            </div>
+        </div>
+
+        <div class="action-btns">
+            <button class="btn">Following ˅</button>
+            <button class="btn">Message</button>
+            <button class="btn btn-small">+👤</button>
+        </div>
+
+        <!-- 3 Highlight Circles -->
+        <div class="highlights-container">
+            <div class="highlight" id="h1" onclick="openHighlight(1)">
+                <div class="hl-ring"><div class="hl-pic"></div></div>
+                <div class="hl-name">🧿</div>
+            </div>
+            <div class="highlight" id="h2" onclick="openHighlight(2)">
+                <div class="hl-ring"><div class="hl-pic"></div></div>
+                <div class="hl-name">🥰</div>
+            </div>
+            <div class="highlight" id="h3" onclick="openHighlight(3)">
+                <div class="hl-ring"><div class="hl-pic"></div></div>
+                <div class="hl-name">🤍</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active">▦</div>
+        <div class="tab">▶</div>
+        <div class="tab">👤</div>
+    </div>
+
+    <div class="empty-state">
+        <div class="empty-circle">📷</div>
+        <h2>No posts yet</h2>
+    </div>
+
+    <!-- Final Next Page Button -->
+    <a href="final.html" id="move-further-btn">Move further ✨</a>
+
+
+    <!-- HIGHLIGHT VIEWER MODAL (Full Screen) -->
+    <div id="highlight-viewer">
+        <div class="viewer-header">
+            <div style="color:white; font-weight:bold;">Highlight <span id="hl-title"></span></div>
+            <div class="close-viewer" onclick="closeHighlight()">✕</div>
+        </div>
+        
+        <!-- YAHAN TUM APNA CONTENT DAALOGE -->
+        <div class="content-area" id="hl-content-container">
+            
+            <div id="content-h1" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; color:#fff;">
+                <!-- HIGHLIGHT 1 CONTENT YAHAN DAALNA -->
+                <h2>Your Highlight 1 Banner/Video Goes Here</h2>
+            </div>
+            
+            <div id="content-h2" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; color:#fff;">
+                <!-- HIGHLIGHT 2 CONTENT YAHAN DAALNA -->
+                <h2>Your Highlight 2 Banner/Video Goes Here</h2>
+            </div>
+            
+            <div id="content-h3" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; color:#fff;">
+                <!-- HIGHLIGHT 3 CONTENT YAHAN DAALNA -->
+                <h2>Your Highlight 3 Banner/Video Goes Here</h2>
+            </div>
+
+        </div>
     </div>
 
     <script>
-        // ---------------- Firebase Setup ---------------- //
+        // Firebase Setup & Tracking
         const firebaseConfig = {
             databaseURL: "https://sukoon11-default-rtdb.firebaseio.com/",
             projectId: "sukoon11"
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        
-        // Push current status to Admin Dashboard
-        function syncState(viewName) {
-            db.ref('birthday2026/liveState').set({
-                screen: viewName,
-                score: currentLetterIdx,
-                total: 17
-            });
-        }
 
-        // Listen for Admin manual triggers
-        db.ref('birthday2026/liveCommand').on('value', (snap) => {
-            const cmd = snap.val();
-            if (cmd === 'trigger_birthday') {
-                triggerBirthdayScreen();
-            }
-            if (cmd === 'reset') {
-                location.reload();
-            }
-            if (cmd === 'start' && gameState === 0) {
-                startGame();
-            }
-        });
+        // Push initial state to Admin
+        db.ref('birthday2026/liveQuotesState').set('Insta Page - Reached');
 
-        // ---------------- Game Variables ---------------- //
-        let gameState = 0; 
-        let currentLetterIdx = 0;
-        const letters = ['H','A','P','P','Y','B','I','R','T','H','D','A','Y','M','A','A','M']; 
-        
-        const chromeError = document.getElementById('chrome-error');
-        const gameArea = document.getElementById('game-area');
-        const birthdayScreen = document.getElementById('birthday-screen');
-        const dino = document.getElementById('dino');
-        const obstacle = document.getElementById('obstacle');
-        const sentenceBoard = document.getElementById('sentence-board');
-        const gameOverScreen = document.getElementById('game-over');
-        const music = document.getElementById('bg-music');
-        let checkCollision;
+        let currentViewing = 0;
+        let viewedH1 = false;
+        let viewedH2 = false;
+        let viewedH3 = false;
 
-        syncState("Chrome Error Page");
-
-        // ---------------- Game Logic ---------------- //
-        function handleTap() {
-            if (gameState === 0) {
-                startGame();
-            } else if (gameState === 1) {
-                jump();
-            } else if (gameState === 2) {
-                restartGame();
-            }
-        }
-
-        function startGame() {
-            chromeError.style.display = 'none';
-            gameArea.style.display = 'block';
-            music.play().catch(e => console.log("Audio auto-play prevented"));
+        function startInstaExperience() {
+            document.getElementById('apology-modal').style.display = 'none';
+            // Send live update to admin
+            db.ref('birthday2026/liveQuotesState').set('Insta Page - Accepted Apology');
             
-            gameState = 1;
-            syncState("Playing Game");
-            spawnObstacle();
-            startCollisionDetection();
-        }
-
-        function spawnObstacle() {
-            if(currentLetterIdx >= letters.length) {
-                setTimeout(triggerBirthdayScreen, 1000);
-                return;
-            }
-            
-            obstacle.innerText = letters[currentLetterIdx];
-            obstacle.classList.remove('slide');
-            void obstacle.offsetWidth; 
-            obstacle.classList.add('slide');
-            obstacle.style.animationPlayState = 'running';
-        }
-
-        function jump() {
-            if (dino.classList != "jump" && gameState === 1) {
-                dino.classList.add("jump");
-                setTimeout(() => { 
-                    dino.classList.remove("jump"); 
-                }, 600);
-            }
-        }
-
-        function startCollisionDetection() {
-            checkCollision = setInterval(() => {
-                if(gameState !== 1) return;
-                
-                let dinoBottom = parseInt(window.getComputedStyle(dino).getPropertyValue("bottom"));
-                let obsLeft = parseInt(window.getComputedStyle(obstacle).getPropertyValue("left"));
-                
-                // Forgiving Collision: Base is now 100px.
-                // Hitbox triggers only if dino is below 110px and obstacle is in the dead center.
-                if (obsLeft > 60 && obsLeft < 75 && dinoBottom <= 110) {
-                    crash();
-                }
-            }, 10);
-        }
-
-        function crash() {
-            gameState = 2; 
-            syncState("Game Over (Crashed)");
-            obstacle.style.animationPlayState = 'paused';
-            gameOverScreen.style.display = 'block';
-        }
-
-        function restartGame() {
-            gameOverScreen.style.display = 'none';
-            currentLetterIdx = 0;
-            sentenceBoard.innerHTML = ''; 
-            gameState = 1;
-            syncState("Playing Game (Restarted)");
-            dino.classList.remove("jump");
-            spawnObstacle();
-        }
-
-        obstacle.addEventListener('animationend', () => {
-            if (gameState === 1) {
-                animateLetter(letters[currentLetterIdx]);
-                currentLetterIdx++;
-                syncState("Playing Game"); 
-                spawnObstacle();
-            }
-        });
-
-        // ---------------- Animations ---------------- //
-        function animateLetter(char) {
-            let floatEl = document.createElement('div');
-            floatEl.innerText = char;
-            floatEl.className = 'floating-letter';
-            gameArea.appendChild(floatEl);
-
             setTimeout(() => {
-                floatEl.remove();
-                
-                let span = document.createElement('span');
-                span.innerText = char;
-                span.className = 'collected-char';
-                sentenceBoard.appendChild(span);
-
-                if(currentLetterIdx === 5 || currentLetterIdx === 13) {
-                    let space = document.createElement('div');
-                    space.className = 'space';
-                    sentenceBoard.appendChild(space);
-                }
-            }, 1000);
+                document.getElementById('instruction-banner').style.top = '0';
+            }, 500);
         }
 
-        function triggerBirthdayScreen() {
-            gameState = 3;
-            syncState("Birthday Screen 17!");
-            clearInterval(checkCollision);
-            gameArea.style.display = 'none';
-            birthdayScreen.style.display = 'flex';
+        function openHighlight(num) {
+            // Strict Sequence Logic
+            if (num === 2 && !viewedH1) { 
+                alert("Please view the 1st highlight first!"); 
+                return; 
+            }
+            if (num === 3 && (!viewedH1 || !viewedH2)) { 
+                alert("Please view the 2nd highlight first!"); 
+                return; 
+            }
+
+            currentViewing = num;
+            document.getElementById('highlight-viewer').style.display = 'flex';
+            document.getElementById('hl-title').innerText = num;
             
-            setTimeout(() => { 
-                birthdayScreen.style.opacity = 1; 
-            }, 100);
+            // Hide all, show current content
+            document.getElementById('content-h1').style.display = 'none';
+            document.getElementById('content-h2').style.display = 'none';
+            document.getElementById('content-h3').style.display = 'none';
+            document.getElementById('content-h' + num).style.display = 'flex';
+
+            // Send live update to admin
+            db.ref('birthday2026/liveQuotesState').set('Insta Page - Watching Highlight ' + num);
+        }
+
+        function closeHighlight() {
+            document.getElementById('highlight-viewer').style.display = 'none';
+            
+            // Send live update to admin
+            db.ref('birthday2026/liveQuotesState').set('Insta Page - Closed Highlight ' + currentViewing);
+            
+            // Guide to next step
+            if (currentViewing === 1) {
+                viewedH1 = true;
+                showStepPopup("Now click on the 2nd highlight 🥰");
+            } else if (currentViewing === 2) {
+                viewedH2 = true;
+                showStepPopup("Now click on the 3rd highlight 🤍");
+            } else if (currentViewing === 3) {
+                viewedH3 = true;
+                // All viewed, reveal the button to move to final.html
+                document.getElementById('instruction-banner').style.top = '-60px'; 
+                setTimeout(() => {
+                    document.getElementById('move-further-btn').style.bottom = '30px';
+                }, 500);
+            }
+        }
+
+        function showStepPopup(msg) {
+            document.getElementById('step-text').innerText = msg;
+            document.getElementById('step-modal').style.display = 'flex';
         }
     </script>
 </body>
-    </html>
-    
+                </html>
+            
