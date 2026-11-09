@@ -143,7 +143,7 @@
         </div>
     </div>
 
-    <!-- Step 9: Class Ending (NEW) -->
+    <!-- Step 9: Class Ending -->
     <div id="step9" class="step-container">
         <div class="glass-box">
             <div class="box-text">Btw I just realised now it's just a 1 or 2 month then my class ends.<br>Fir yeh itna acha chehra dekhne ko kaise milega 😭😭😭</div>
@@ -162,7 +162,7 @@
         </div>
     </div>
 
-    <!-- Step 10: Gift Request (NEW) -->
+    <!-- Step 10: Gift Request -->
     <div id="step10" class="step-container">
         <div class="glass-box">
             <div class="box-text">Btw do u want any gift or something u want from me?<br>Plz Write below 🎁</div>
@@ -240,34 +240,50 @@
             setTimeout(() => { document.getElementById('step' + next).classList.add('active-step'); }, 300);
         }
 
-        // --- Live Response Catchers ---
+        // --- Live Response Catchers with Validation ---
         function recordChoice(choice, next) {
             db.ref('birthday2026/userResponses/storyChoice').set(choice);
             nextStep(1, next);
         }
 
         function submitClassEnd(darshanResponse) {
-            const text = document.getElementById('think-input').value;
-            db.ref('birthday2026/userResponses/classEndThoughts').set(text || "Left empty");
+            const text = document.getElementById('think-input').value.trim();
+            if (!text) {
+                alert("You have to type something to move forward! ✨");
+                return;
+            }
+            db.ref('birthday2026/userResponses/classEndThoughts').set(text);
             db.ref('birthday2026/userResponses/darshanTomorrow').set(darshanResponse);
             nextStep(9, 10);
         }
 
         function submitGift() {
-            const text = document.getElementById('gift-input').value;
-            db.ref('birthday2026/userResponses/giftRequest').set(text || "Left empty");
+            const text = document.getElementById('gift-input').value.trim();
+            if (!text) {
+                alert("You have to type something to move forward! 🎁");
+                return;
+            }
+            db.ref('birthday2026/userResponses/giftRequest').set(text);
             nextStep(10, 11);
         }
 
         function submitAsk() {
-            const text = document.getElementById('ask-input').value;
-            db.ref('birthday2026/userResponses/askAnything').set(text || "Left empty");
+            const text = document.getElementById('ask-input').value.trim();
+            if (!text) {
+                alert("You have to type something to move forward! ✨");
+                return;
+            }
+            db.ref('birthday2026/userResponses/askAnything').set(text);
             nextStep(11, 12);
         }
 
         function submitDump() {
-            const text = document.getElementById('dump-input').value;
-            db.ref('birthday2026/userResponses/dumpSpace').set(text || "Left empty");
+            const text = document.getElementById('dump-input').value.trim();
+            if (!text) {
+                alert("You have to type something to move forward! 🤍");
+                return;
+            }
+            db.ref('birthday2026/userResponses/dumpSpace').set(text);
             nextStep(12, 13);
         }
 
@@ -314,5 +330,5 @@
         }
     </script>
 </body>
-            </html>
+    </html>
         
