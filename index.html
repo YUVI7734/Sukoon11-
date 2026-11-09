@@ -32,7 +32,7 @@
         .profile-section { padding: 15px; }
         .stats-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
         .profile-pic-container { position: relative; width: 85px; height: 85px; border-radius: 50%; padding: 3px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
-        .profile-pic { width: 100%; height: 100%; border-radius: 50%; border: 3px solid #000; background: #333 url('aradhya_dp_placeholder.jpg') center/cover; }
+        .profile-pic { width: 100%; height: 100%; border-radius: 50%; border: 3px solid #000; background: #333 center/cover; }
         .stats { display: flex; gap: 30px; text-align: center; flex: 1; justify-content: center; }
         .stat-box .count { font-weight: 700; font-size: 16px; margin-bottom: 3px; }
         .stat-box .label { font-size: 13px; color: #a8a8a8; }
@@ -57,7 +57,7 @@
         .hl-pic { width: 100%; height: 100%; border-radius: 50%; background: #333 center/cover; border: 2px solid #000; }
         .hl-name { font-size: 12px; }
         
-        /* Placeholder Images for highlights */
+        /* Placeholder Images for highlights (before Admin upload) */
         #h1 .hl-pic { background-color: #ff7eb3; }
         #h2 .hl-pic { background-color: #8ab4f8; }
         #h3 .hl-pic { background-color: #2ecc71; }
@@ -205,7 +205,7 @@
     </div>
 
     <script>
-        // Firebase Setup & Tracking
+        // ---------------- FIREBASE SETUP & LIVE SYNC ---------------- //
         const firebaseConfig = {
             databaseURL: "https://sukoon11-default-rtdb.firebaseio.com/",
             projectId: "sukoon11"
@@ -216,6 +216,20 @@
         // Push initial state to Admin
         db.ref('birthday2026/liveQuotesState').set('Insta Page - Reached');
 
+        // LIVE INSTA DP & HIGHLIGHT IMAGE SYNC FROM ADMIN
+        db.ref('birthday2026/instaData').on('value', (snap) => {
+            const data = snap.val() || {};
+            // Sync Profile Pic
+            if(data.dp) document.querySelector('.profile-pic').style.backgroundImage = `url(${data.dp})`;
+            
+            // Sync Highlight Covers
+            if(data.hl1) document.querySelector('#h1 .hl-pic').style.backgroundImage = `url(${data.hl1})`;
+            if(data.hl2) document.querySelector('#h2 .hl-pic').style.backgroundImage = `url(${data.hl2})`;
+            if(data.hl3) document.querySelector('#h3 .hl-pic').style.backgroundImage = `url(${data.hl3})`;
+        });
+
+
+        // ---------------- INTERACTION LOGIC ---------------- //
         let currentViewing = 0;
         let viewedH1 = false;
         let viewedH2 = false;
@@ -285,5 +299,5 @@
         }
     </script>
 </body>
-                </html>
-            
+    </html>
+    
