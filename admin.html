@@ -11,19 +11,19 @@
     
     <style>
         body { 
-            background: #0f0f0f; color: #fff; 
+            background: #0a0a0a; color: #fff; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             padding: 15px; margin: 0;
         }
         
         .dashboard { 
-            background: #1e1e1e; padding: 20px; 
+            background: #1a1a1a; padding: 20px; 
             border-radius: 12px; margin-bottom: 20px; 
             border: 1px solid #333; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
         }
 
-        h2 { color: #d4af37; text-align: center; margin-top: 10px; margin-bottom: 20px; font-weight: 800; letter-spacing: 1px;}
+        h2 { color: #d4af37; text-align: center; margin-top: 10px; margin-bottom: 20px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;}
         h3 { color: #8ab4f8; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; font-size: 18px; }
         
         .live-indicator { 
@@ -34,13 +34,15 @@
         }
         @keyframes blink { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
 
-        .status-row { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 12px 0; border-bottom: 1px solid #2a2a2a; font-size: 16px; 
-        }
-        .status-row:last-child { border-bottom: none; }
+        .status-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #2a2a2a; font-size: 16px; }
         .live-value { font-weight: bold; color: #2ecc71; font-family: monospace; font-size: 18px; }
         
+        /* Responses Box Styling */
+        .resp-box { background: #222; padding: 15px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #444; border-left: 4px solid #8ab4f8; }
+        .resp-label { color: #d4af37; font-size: 13px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;}
+        .resp-text { color: #fff; font-size: 16px; white-space: pre-wrap; font-family: monospace;}
+
+        /* Upload & Inputs */
         .upload-row { margin-bottom: 15px; }
         .flex-row { display: flex; gap: 10px; align-items: center; margin-top: 5px; }
         label { color: #aaa; font-size: 13px; font-weight: bold; }
@@ -54,7 +56,7 @@
             padding: 12px; font-size: 15px; border-radius: 8px; 
             cursor: pointer; font-weight: bold; transition: all 0.2s; 
         }
-        button:active { transform: scale(0.98); }
+        button:active { transform: scale(0.95); }
         .primary-btn { background: linear-gradient(45deg, #d4af37, #ffdf00); color: #111; width: 100%; margin-top:10px; box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
         .danger-btn { background: linear-gradient(45deg, #ff4757, #ff6b81); color: white; width: 100%; margin-top:10px; }
         .remove-btn { background: #ff4757; color: white; padding: 12px; width: 100px; }
@@ -67,7 +69,7 @@
     
     <!-- 1. LIVE TRACKING -->
     <div class="dashboard">
-        <h3>Live Zero-Delay Report</h3>
+        <h3>📍 Live Tracking Status</h3>
         <div class="status-row">
             <span>Her Current Screen:</span>
             <span id="current-screen" class="live-value" style="color: #f39c12;">Waiting for her...</span>
@@ -78,43 +80,71 @@
         </div>
     </div>
 
-    <!-- 2. QUOTES & AESTHETIC PANEL -->
-    <div class="dashboard">
-        <h3>Quotes Page: Visuals & Music Control</h3>
+    <!-- 2. HER LIVE RESPONSES -->
+    <div class="dashboard" style="border: 1px solid #d4af37; box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);">
+        <h3 style="color: #d4af37;">💌 Her Live Responses (Final Story)</h3>
         
-        <!-- Image Upload & Remove -->
+        <div class="resp-box">
+            <div class="resp-label">Story Mention Choice (Yes/No/Custom):</div>
+            <div class="resp-text" id="resp-story">Waiting...</div>
+        </div>
+        <div class="resp-box">
+            <div class="resp-label">Class End Thoughts (What u think):</div>
+            <div class="resp-text" id="resp-class-end">Waiting...</div>
+        </div>
+        <div class="resp-box" style="border-left-color: #ff4757;">
+            <div class="resp-label" style="color: #ff4757;">Darshan Tomorrow (Yes/No):</div>
+            <div class="resp-text" id="resp-darshan" style="font-size: 22px; font-weight: bold; color: #ffdf00;">Waiting...</div>
+        </div>
+        <div class="resp-box" style="border-left-color: #2ecc71;">
+            <div class="resp-label" style="color: #2ecc71;">Gift Request:</div>
+            <div class="resp-text" id="resp-gift">Waiting...</div>
+        </div>
+        <div class="resp-box">
+            <div class="resp-label">Ask Me Anything Answer:</div>
+            <div class="resp-text" id="resp-ask">Waiting...</div>
+        </div>
+        <div class="resp-box">
+            <div class="resp-label">Dump Space (Whatever she feels):</div>
+            <div class="resp-text" id="resp-dump">Waiting...</div>
+        </div>
+    </div>
+
+    <!-- 3. QUOTES PAGE VISUALS & MUSIC -->
+    <div class="dashboard">
+        <h3>✨ Quotes Page: Visuals & Music</h3>
+        
         <div class="upload-row">
             <label>Page 1 Image (Rare Spark)</label>
             <div class="flex-row">
-                <input type="file" accept="image/*" onchange="uploadImage(event, 'pic1')">
-                <button class="remove-btn" onclick="removeImage('pic1')">🗑 Remove</button>
+                <input type="file" accept="image/*" onchange="uploadImage(event, 'quotesData/pic1')">
+                <button class="remove-btn" onclick="removeImage('quotesData/pic1')">🗑</button>
             </div>
         </div>
         <div class="upload-row">
             <label>Page 2 Image (Beautiful Chaos)</label>
             <div class="flex-row">
-                <input type="file" accept="image/*" onchange="uploadImage(event, 'pic2')">
-                <button class="remove-btn" onclick="removeImage('pic2')">🗑 Remove</button>
+                <input type="file" accept="image/*" onchange="uploadImage(event, 'quotesData/pic2')">
+                <button class="remove-btn" onclick="removeImage('quotesData/pic2')">🗑</button>
             </div>
         </div>
         <div class="upload-row">
             <label>Page 3 Image (11:11)</label>
             <div class="flex-row">
-                <input type="file" accept="image/*" onchange="uploadImage(event, 'pic3')">
-                <button class="remove-btn" onclick="removeImage('pic3')">🗑 Remove</button>
+                <input type="file" accept="image/*" onchange="uploadImage(event, 'quotesData/pic3')">
+                <button class="remove-btn" onclick="removeImage('quotesData/pic3')">🗑</button>
             </div>
         </div>
 
         <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0;">
 
-        <!-- Song & Timer Config -->
         <div class="upload-row">
             <label>Aesthetic Song URL (MP3 Link)</label>
             <input type="text" id="song-url" placeholder="Paste .mp3 link here">
         </div>
         
         <div class="upload-row">
-            <label>Start Song From (in seconds) - e.g., 45 for 0:45</label>
+            <label>Start Song From (in seconds) - e.g., 45</label>
             <div class="flex-row">
                 <input type="number" id="song-start-time" placeholder="0" value="0">
                 <button class="action-btn" style="margin-top:0; width: 120px;" onclick="updateSongConfig()">Sync Audio</button>
@@ -125,9 +155,20 @@
         <button class="danger-btn" onclick="stopQuotesMusic()">⏸ STOP MUSIC</button>
     </div>
 
-    <!-- 3. DINO GAME CONTROLS -->
+    <!-- 4. INSTAGRAM UPLOADS -->
     <div class="dashboard">
-        <h3>Dino Game: Secret Controls</h3>
+        <h3>📸 Insta Page: Live Update DP & Highlights</h3>
+        <p style="font-size: 12px; color: #888; margin-bottom: 15px;">Instantly changes pictures on her fake Instagram screen.</p>
+        
+        <div class="upload-row"><label>Profile Picture (DP)</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/dp')"></div>
+        <div class="upload-row"><label>Highlight 1 Cover (🧿)</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl1')"></div>
+        <div class="upload-row"><label>Highlight 2 Cover (🥰)</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl2')"></div>
+        <div class="upload-row"><label>Highlight 3 Cover (🤍)</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl3')"></div>
+    </div>
+
+    <!-- 5. DINO GAME CONTROLS -->
+    <div class="dashboard">
+        <h3>🦖 Dino Game: Secret Controls</h3>
         <button onclick="sendDinoCommand('start')" class="action-btn">Force Start Game (If stuck)</button>
         <button onclick="sendDinoCommand('trigger_birthday')" class="primary-btn">Direct Skip to 17 Cake</button>
         <button onclick="sendDinoCommand('reset')" class="danger-btn">Force Reload Her Page</button>
@@ -143,34 +184,46 @@
         const db = firebase.database();
 
         // ---------------- 1. LIVE TRACKING ---------------- //
+        // Listen to Dino Game Stats
         db.ref('birthday2026/liveState').on('value', (snap) => {
             const data = snap.val();
             if (data) {
-                const screenEl = document.getElementById('current-screen');
-                screenEl.innerText = data.screen;
-                if(data.screen.includes("Crashed") || data.screen.includes("Game Over")) {
-                    screenEl.style.color = "#ff4757"; 
-                } else if(data.screen.includes("Birthday")) {
-                    screenEl.style.color = "#d4af37"; 
-                } else {
-                    screenEl.style.color = "#2ecc71"; 
-                }
                 document.getElementById('current-score').innerText = `${data.score} / ${data.total}`;
+                // Only show Dino screen if she hasn't reached quotes yet
+                if(data.screen) document.getElementById('current-screen').innerText = "Dino Game: " + data.screen;
             }
         });
 
+        // Listen to Quotes/Insta/Final Story Stats (Overrides Dino)
         db.ref('birthday2026/liveQuotesState').on('value', (snap) => {
             const state = snap.val();
             if (state) {
-                document.getElementById('current-screen').innerText = state;
-                document.getElementById('current-screen').style.color = "#8ab4f8";
+                const screenEl = document.getElementById('current-screen');
+                screenEl.innerText = state;
+                
+                if(state.includes("Final Story")) screenEl.style.color = "#ffdf00";
+                else if(state.includes("Insta Page")) screenEl.style.color = "#e1306c";
+                else screenEl.style.color = "#8ab4f8";
             }
         });
 
-        // ---------------- 2. IMAGE UPLOAD & REMOVE ---------------- //
-        function uploadImage(event, picKey) {
+        // ---------------- 2. HER LIVE RESPONSES ---------------- //
+        db.ref('birthday2026/userResponses').on('value', (snap) => {
+            const data = snap.val() || {};
+            document.getElementById('resp-story').innerText = data.storyChoice || 'Waiting...';
+            document.getElementById('resp-class-end').innerText = data.classEndThoughts || 'Waiting...';
+            document.getElementById('resp-darshan').innerText = data.darshanTomorrow || 'Waiting...';
+            document.getElementById('resp-gift').innerText = data.giftRequest || 'Waiting...';
+            document.getElementById('resp-ask').innerText = data.askAnything || 'Waiting...';
+            document.getElementById('resp-dump').innerText = data.dumpSpace || 'Waiting...';
+        });
+
+        // ---------------- 3. IMAGE COMPRESSOR & UPLOADER ---------------- //
+        function uploadImage(event, dbPath) {
             const file = event.target.files[0];
             if(!file) return;
+
+            event.target.style.borderColor = "#f39c12"; // Loading color
 
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -193,8 +246,11 @@
                     
                     const base64Data = canvas.toDataURL('image/jpeg', 0.6); 
                     
-                    db.ref('birthday2026/quotesData/' + picKey).set(base64Data)
-                      .then(() => alert(`Success! ${picKey} synced live to her phone.`))
+                    db.ref('birthday2026/' + dbPath).set(base64Data)
+                      .then(() => {
+                          event.target.style.borderColor = "#2ecc71"; // Success green
+                          alert(`Success! Image synced to ${dbPath}`);
+                      })
                       .catch(err => alert("Upload failed: " + err.message));
                 }
                 img.src = e.target.result;
@@ -202,35 +258,32 @@
             reader.readAsDataURL(file);
         }
 
-        // New function to remove images
-        function removeImage(picKey) {
-            db.ref('birthday2026/quotesData/' + picKey).remove()
-              .then(() => alert(`${picKey} removed from her screen!`))
+        function removeImage(dbPath) {
+            db.ref('birthday2026/' + dbPath).remove()
+              .then(() => alert(`Removed from her screen!`))
               .catch(err => alert("Failed to remove: " + err.message));
         }
 
-        // ---------------- 3. MUSIC CONFIG & CONTROLS ---------------- //
+        // ---------------- 4. MUSIC CONFIG & CONTROLS ---------------- //
         function updateSongConfig() {
             const url = document.getElementById('song-url').value;
             const startTime = document.getElementById('song-start-time').value || 0;
             
-            if(url) {
-                db.ref('birthday2026/quotesData/songUrl').set(url);
-            }
+            if(url) db.ref('birthday2026/quotesData/songUrl').set(url);
             db.ref('birthday2026/quotesData/songStartTime').set(Number(startTime))
               .then(() => alert("Audio link and Start Time Synced!"));
         }
 
         function playQuotesMusic() {
             db.ref('birthday2026/liveCommandQuotes').set('play_music');
-            alert("Play command sent!");
+            alert("Play command sent to Quotes Page!");
         }
 
         function stopQuotesMusic() {
             db.ref('birthday2026/liveCommandQuotes').set('stop_music');
         }
 
-        // ---------------- 4. DINO GAME CONTROLS ---------------- //
+        // ---------------- 5. DINO GAME CONTROLS ---------------- //
         function sendDinoCommand(cmd) {
             db.ref('birthday2026/liveCommand').set(cmd).then(() => {
                 setTimeout(() => db.ref('birthday2026/liveCommand').set('idle'), 1500);
@@ -238,4 +291,5 @@
         }
     </script>
 </body>
-</html>
+    </html>
+            
