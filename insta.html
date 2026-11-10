@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Instagram</title>
     
-    <!-- Firebase Libraries -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -13,7 +12,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; user-select: none; }
         body { background-color: #000; color: #fff; overflow-x: hidden; }
 
-        /* --- Modals & Popups --- */
+        /* Modals */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; transition: 0.3s; }
         .popup-box { background: #1c1c1e; border-radius: 15px; padding: 30px 20px; width: 80%; text-align: center; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .popup-text { font-size: 16px; margin-bottom: 20px; line-height: 1.5; color: #f0f0f0; }
@@ -23,12 +22,10 @@
 
         @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* --- Insta Header --- */
+        /* Header & Profile */
         .header { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #262626; position: sticky; top: 0; background: #000; z-index: 100; }
         .header-left { display: flex; align-items: center; gap: 15px; font-size: 20px; font-weight: 700; }
         .header-right { display: flex; gap: 20px; font-size: 22px; }
-
-        /* --- Profile Section --- */
         .profile-section { padding: 15px; }
         .stats-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
         .profile-pic-container { position: relative; width: 85px; height: 85px; border-radius: 50%; padding: 3px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
@@ -37,7 +34,7 @@
         .stat-box .count { font-weight: 700; font-size: 16px; margin-bottom: 3px; }
         .stat-box .label { font-size: 13px; color: #a8a8a8; }
 
-        /* --- Bio Section --- */
+        /* Bio */
         .bio { font-size: 14px; line-height: 1.4; margin-bottom: 15px; }
         .bio-name { font-weight: 600; margin-bottom: 2px; }
         .followed-by { font-size: 12px; color: #a8a8a8; display: flex; align-items: center; gap: 10px; margin-top: 10px; }
@@ -45,45 +42,43 @@
         .mutual-pics div { width: 24px; height: 24px; border-radius: 50%; background: #444; border: 2px solid #000; margin-left: -10px; }
         .mutual-pics div:first-child { margin-left: 0; }
 
-        /* --- Action Buttons --- */
+        /* Actions */
         .action-btns { display: flex; gap: 8px; margin-bottom: 20px; }
         .btn { flex: 1; background: #262626; color: #fff; font-weight: 600; font-size: 14px; padding: 8px; border-radius: 8px; border: none; text-align: center; }
         .btn-small { width: 40px; flex: none; }
 
-        /* --- Highlights --- */
+        /* Highlights */
         .highlights-container { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
         .highlight { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; }
         .hl-ring { width: 65px; height: 65px; border-radius: 50%; padding: 2px; border: 1px solid #555; display: flex; justify-content: center; align-items: center; }
         .hl-pic { width: 100%; height: 100%; border-radius: 50%; background: #333 center/cover; border: 2px solid #000; }
         .hl-name { font-size: 12px; }
         
-        /* Placeholder Images for highlights (before Admin upload) */
         #h1 .hl-pic { background-color: #ff7eb3; }
         #h2 .hl-pic { background-color: #8ab4f8; }
         #h3 .hl-pic { background-color: #2ecc71; }
 
-        /* --- Grid Tabs & Posts --- */
         .tabs { display: flex; border-top: 1px solid #262626; margin-top: 10px; }
         .tab { flex: 1; text-align: center; padding: 12px 0; border-bottom: 1px solid transparent; color: #888; }
         .tab.active { border-bottom: 1px solid #fff; color: #fff; }
         
         .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 20px; text-align: center; }
         .empty-circle { width: 90px; height: 90px; border: 2px solid #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; font-size: 40px; }
-        .empty-state h2 { font-size: 22px; font-weight: 800; }
-
-        /* --- Highlight Fullscreen Viewer --- */
+        
+        /* Highlight Viewer (Full Screen) */
         #highlight-viewer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; display: none; flex-direction: column; }
         .viewer-header { display: flex; justify-content: space-between; padding: 15px; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); position: absolute; width: 100%; z-index: 10; }
         .close-viewer { color: #fff; font-size: 24px; cursor: pointer; }
-        .content-area { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; }
+        .content-area { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; background: #111; }
         
-        /* --- Final Button --- */
+        .hl-content-box { display: none; width: 100%; height: 100%; align-items: center; justify-content: center; color: #888; font-size: 14px; text-align: center; flex-direction: column; }
+        .hl-content-box img, .hl-content-box video { width: 100%; height: 100%; object-fit: contain; }
+
         #move-further-btn { position: fixed; bottom: -80px; left: 50%; transform: translateX(-50%); background: linear-gradient(45deg, #d4af37, #ffdf00); color: #000; font-weight: 800; font-size: 16px; padding: 15px 40px; border-radius: 30px; z-index: 900; transition: 0.5s; text-decoration: none; box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); white-space: nowrap; }
     </style>
 </head>
 <body>
 
-    <!-- 1. Initial Apology Popup -->
     <div id="apology-modal" class="overlay">
         <div class="popup-box">
             <div class="popup-text">Sorry as I have used some of ur pics without ur permission 😅🤍</div>
@@ -91,7 +86,6 @@
         </div>
     </div>
 
-    <!-- Step Guidance Popup -->
     <div id="step-modal" class="overlay" style="display: none;">
         <div class="popup-box">
             <div class="popup-text" id="step-text">Now click on the 2nd highlight</div>
@@ -99,26 +93,16 @@
         </div>
     </div>
 
-    <!-- Instruction Banner -->
     <div id="instruction-banner">Click on the highlights to go further 👇</div>
 
-    <!-- INSTA MAIN UI -->
     <div class="header">
-        <div class="header-left">
-            <span>←</span>
-            <span>aradhyaa._shankhdhar</span>
-        </div>
-        <div class="header-right">
-            <span>🔔</span>
-            <span>⋮</span>
-        </div>
+        <div class="header-left"><span>←</span><span>aradhyaa._shankhdhar</span></div>
+        <div class="header-right"><span>🔔</span><span>⋮</span></div>
     </div>
 
     <div class="profile-section">
         <div class="stats-row">
-            <div class="profile-pic-container">
-                <div class="profile-pic"></div>
-            </div>
+            <div class="profile-pic-container"><div class="profile-pic"></div></div>
             <div class="stats">
                 <div class="stat-box"><div class="count">0</div><div class="label">posts</div></div>
                 <div class="stat-box"><div class="count">271</div><div class="label">followers</div></div>
@@ -128,168 +112,127 @@
 
         <div class="bio">
             <div class="bio-name">~Aradhyaa she/her</div>
-            I'm such a fan of me 🪬⭐<br>
-            ~11 🪄🧸🕯️
+            I'm such a fan of me 🪬⭐<br>~11 🪄🧸🕯️
             <div class="followed-by">
-                <div class="mutual-pics">
-                    <div></div><div></div><div></div>
-                </div>
+                <div class="mutual-pics"><div></div><div></div><div></div></div>
                 Followed by divyanshhhhhhh_.-._,<br>_iam_maniac_ and 8 others
             </div>
         </div>
 
         <div class="action-btns">
-            <button class="btn">Following ˅</button>
-            <button class="btn">Message</button>
-            <button class="btn btn-small">+👤</button>
+            <button class="btn">Following ˅</button><button class="btn">Message</button><button class="btn btn-small">+👤</button>
         </div>
 
-        <!-- 3 Highlight Circles -->
         <div class="highlights-container">
-            <div class="highlight" id="h1" onclick="openHighlight(1)">
-                <div class="hl-ring"><div class="hl-pic"></div></div>
-                <div class="hl-name">🧿</div>
-            </div>
-            <div class="highlight" id="h2" onclick="openHighlight(2)">
-                <div class="hl-ring"><div class="hl-pic"></div></div>
-                <div class="hl-name">🥰</div>
-            </div>
-            <div class="highlight" id="h3" onclick="openHighlight(3)">
-                <div class="hl-ring"><div class="hl-pic"></div></div>
-                <div class="hl-name">🤍</div>
-            </div>
+            <div class="highlight" id="h1" onclick="openHighlight(1)"><div class="hl-ring"><div class="hl-pic"></div></div><div class="hl-name">🧿</div></div>
+            <div class="highlight" id="h2" onclick="openHighlight(2)"><div class="hl-ring"><div class="hl-pic"></div></div><div class="hl-name">🥰</div></div>
+            <div class="highlight" id="h3" onclick="openHighlight(3)"><div class="hl-ring"><div class="hl-pic"></div></div><div class="hl-name">🤍</div></div>
         </div>
     </div>
 
-    <div class="tabs">
-        <div class="tab active">▦</div>
-        <div class="tab">▶</div>
-        <div class="tab">👤</div>
-    </div>
+    <div class="tabs"><div class="tab active">▦</div><div class="tab">▶</div><div class="tab">👤</div></div>
 
     <div class="empty-state">
-        <div class="empty-circle">📷</div>
-        <h2>No posts yet</h2>
+        <div class="empty-circle">📷</div><h2>No posts yet</h2>
     </div>
 
-    <!-- Final Next Page Button -->
     <a href="final.html" id="move-further-btn">Move further ✨</a>
 
-
-    <!-- HIGHLIGHT VIEWER MODAL (Full Screen) -->
+    <!-- Highlight Viewer -->
     <div id="highlight-viewer">
         <div class="viewer-header">
             <div style="color:white; font-weight:bold;">Highlight <span id="hl-title"></span></div>
             <div class="close-viewer" onclick="closeHighlight()">✕</div>
         </div>
         
-        <!-- YAHAN TUM APNA CONTENT DAALOGE -->
-        <div class="content-area" id="hl-content-container">
-            
-            <div id="content-h1" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; color:#fff;">
-                <!-- HIGHLIGHT 1 CONTENT YAHAN DAALNA -->
-                <h2>Your Highlight 1 Banner/Video Goes Here</h2>
-            </div>
-            
-            <div id="content-h2" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; color:#fff;">
-                <!-- HIGHLIGHT 2 CONTENT YAHAN DAALNA -->
-                <h2>Your Highlight 2 Banner/Video Goes Here</h2>
-            </div>
-            
-            <div id="content-h3" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; color:#fff;">
-                <!-- HIGHLIGHT 3 CONTENT YAHAN DAALNA -->
-                <h2>Your Highlight 3 Banner/Video Goes Here</h2>
-            </div>
-
+        <div class="content-area">
+            <div id="content-h1" class="hl-content-box">Admin is uploading content...</div>
+            <div id="content-h2" class="hl-content-box">Admin is uploading content...</div>
+            <div id="content-h3" class="hl-content-box">Admin is uploading content...</div>
         </div>
     </div>
 
     <script>
-        // ---------------- FIREBASE SETUP & LIVE SYNC ---------------- //
-        const firebaseConfig = {
-            databaseURL: "https://sukoon11-default-rtdb.firebaseio.com/",
-            projectId: "sukoon11"
-        };
+        const firebaseConfig = { databaseURL: "https://sukoon11-default-rtdb.firebaseio.com/", projectId: "sukoon11" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // Push initial state to Admin
         db.ref('birthday2026/liveQuotesState').set('Insta Page - Reached');
 
-        // LIVE INSTA DP & HIGHLIGHT IMAGE SYNC FROM ADMIN
+        // LIVE INSTA SYNC FROM ADMIN
         db.ref('birthday2026/instaData').on('value', (snap) => {
             const data = snap.val() || {};
-            // Sync Profile Pic
-            if(data.dp) document.querySelector('.profile-pic').style.backgroundImage = `url(${data.dp})`;
             
-            // Sync Highlight Covers
-            if(data.hl1) document.querySelector('#h1 .hl-pic').style.backgroundImage = `url(${data.hl1})`;
-            if(data.hl2) document.querySelector('#h2 .hl-pic').style.backgroundImage = `url(${data.hl2})`;
-            if(data.hl3) document.querySelector('#h3 .hl-pic').style.backgroundImage = `url(${data.hl3})`;
+            // Sync Covers & DP
+            if(data.dp) document.querySelector('.profile-pic').style.backgroundImage = `url(${data.dp})`;
+            if(data.hl1_cover) document.querySelector('#h1 .hl-pic').style.backgroundImage = `url(${data.hl1_cover})`;
+            if(data.hl2_cover) document.querySelector('#h2 .hl-pic').style.backgroundImage = `url(${data.hl2_cover})`;
+            if(data.hl3_cover) document.querySelector('#h3 .hl-pic').style.backgroundImage = `url(${data.hl3_cover})`;
+
+            // Sync Inside Content (Video prioritised over image)
+            updateHighlightContent('content-h1', data.hl1_img, data.hl1_vid);
+            updateHighlightContent('content-h2', data.hl2_img, data.hl2_vid);
+            updateHighlightContent('content-h3', data.hl3_img, data.hl3_vid);
         });
 
+        function updateHighlightContent(containerId, imgBase64, vidUrl) {
+            const container = document.getElementById(containerId);
+            if(vidUrl) {
+                container.innerHTML = `<video src="${vidUrl}" autoplay loop playsinline></video>`;
+            } else if(imgBase64) {
+                container.innerHTML = `<img src="${imgBase64}">`;
+            } else {
+                container.innerHTML = `Admin is uploading content...`;
+            }
+        }
 
-        // ---------------- INTERACTION LOGIC ---------------- //
         let currentViewing = 0;
-        let viewedH1 = false;
-        let viewedH2 = false;
-        let viewedH3 = false;
+        let viewedH1 = false; let viewedH2 = false; let viewedH3 = false;
 
         function startInstaExperience() {
             document.getElementById('apology-modal').style.display = 'none';
-            // Send live update to admin
             db.ref('birthday2026/liveQuotesState').set('Insta Page - Accepted Apology');
-            
-            setTimeout(() => {
-                document.getElementById('instruction-banner').style.top = '0';
-            }, 500);
+            setTimeout(() => { document.getElementById('instruction-banner').style.top = '0'; }, 500);
         }
 
         function openHighlight(num) {
-            // Strict Sequence Logic
-            if (num === 2 && !viewedH1) { 
-                alert("Please view the 1st highlight first!"); 
-                return; 
-            }
-            if (num === 3 && (!viewedH1 || !viewedH2)) { 
-                alert("Please view the 2nd highlight first!"); 
-                return; 
-            }
+            if (num === 2 && !viewedH1) { alert("Please view the 1st highlight first!"); return; }
+            if (num === 3 && (!viewedH1 || !viewedH2)) { alert("Please view the 2nd highlight first!"); return; }
 
             currentViewing = num;
             document.getElementById('highlight-viewer').style.display = 'flex';
             document.getElementById('hl-title').innerText = num;
             
-            // Hide all, show current content
             document.getElementById('content-h1').style.display = 'none';
             document.getElementById('content-h2').style.display = 'none';
             document.getElementById('content-h3').style.display = 'none';
-            document.getElementById('content-h' + num).style.display = 'flex';
+            
+            const currentBox = document.getElementById('content-h' + num);
+            currentBox.style.display = 'flex';
 
-            // Send live update to admin
+            // Autoplay video if exists
+            const vid = currentBox.querySelector('video');
+            if(vid) vid.play().catch(e => console.log(e));
+
             db.ref('birthday2026/liveQuotesState').set('Insta Page - Watching Highlight ' + num);
         }
 
         function closeHighlight() {
             document.getElementById('highlight-viewer').style.display = 'none';
             
-            // Send live update to admin
+            // Stop video if playing
+            const currentBox = document.getElementById('content-h' + currentViewing);
+            const vid = currentBox.querySelector('video');
+            if(vid) vid.pause();
+
             db.ref('birthday2026/liveQuotesState').set('Insta Page - Closed Highlight ' + currentViewing);
             
-            // Guide to next step
-            if (currentViewing === 1) {
-                viewedH1 = true;
-                showStepPopup("Now click on the 2nd highlight 🥰");
-            } else if (currentViewing === 2) {
-                viewedH2 = true;
-                showStepPopup("Now click on the 3rd highlight 🤍");
-            } else if (currentViewing === 3) {
+            if (currentViewing === 1) { viewedH1 = true; showStepPopup("Now click on the 2nd highlight 🥰"); }
+            else if (currentViewing === 2) { viewedH2 = true; showStepPopup("Now click on the 3rd highlight 🤍"); }
+            else if (currentViewing === 3) {
                 viewedH3 = true;
-                // All viewed, reveal the button to move to final.html
                 document.getElementById('instruction-banner').style.top = '-60px'; 
-                setTimeout(() => {
-                    document.getElementById('move-further-btn').style.bottom = '30px';
-                }, 500);
+                setTimeout(() => { document.getElementById('move-further-btn').style.bottom = '30px'; }, 500);
             }
         }
 
