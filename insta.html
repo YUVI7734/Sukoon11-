@@ -3,26 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Instagram</title>
+    <title>Instagram - Aradhyaa</title>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600;800&display=swap');
+        
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; user-select: none; }
         body { background-color: #000; color: #fff; overflow-x: hidden; }
 
-        /* Modals */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; transition: 0.3s; }
-        .popup-box { background: #1c1c1e; border-radius: 15px; padding: 30px 20px; width: 80%; text-align: center; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .popup-text { font-size: 16px; margin-bottom: 20px; line-height: 1.5; color: #f0f0f0; }
-        .popup-btn { background: #0095f6; color: #fff; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 600; font-size: 15px; cursor: pointer; width: 100%; }
+        /* --- PREMIUM APOLOGY MODAL --- */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; z-index: 1000; transition: 0.4s; }
         
-        #instruction-banner { position: fixed; top: -60px; left: 0; width: 100%; background: rgba(38, 38, 38, 0.95); color: #fff; text-align: center; padding: 15px; font-weight: 600; font-size: 14px; z-index: 900; transition: top 0.5s ease; border-bottom: 1px solid #333; }
+        #apology-box {
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 35px 25px;
+            width: 85%;
+            max-width: 350px;
+            text-align: center;
+            border: 1px solid rgba(255, 223, 0, 0.3);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.2);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .apology-icon { font-size: 40px; margin-bottom: 10px; animation: float 3s ease-in-out infinite; }
+        
+        .apology-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            background: linear-gradient(45deg, #ff7eb3, #ffdf00);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .apology-btn {
+            background: linear-gradient(135deg, #d4af37, #ffdf00);
+            color: #111;
+            border: none;
+            padding: 14px 0;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+            transition: 0.2s;
+        }
+        .apology-btn:active { transform: scale(0.95); }
 
         @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
-        /* Header & Profile */
+        /* --- INSTA UI STYLES --- */
+        #instruction-banner { position: fixed; top: -60px; left: 0; width: 100%; background: rgba(38, 38, 38, 0.95); color: #fff; text-align: center; padding: 15px; font-weight: 600; font-size: 14px; z-index: 900; transition: top 0.5s ease; border-bottom: 1px solid #333; }
+        
         .header { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #262626; position: sticky; top: 0; background: #000; z-index: 100; }
         .header-left { display: flex; align-items: center; gap: 15px; font-size: 20px; font-weight: 700; }
         .header-right { display: flex; gap: 20px; font-size: 22px; }
@@ -33,64 +75,74 @@
         .stats { display: flex; gap: 30px; text-align: center; flex: 1; justify-content: center; }
         .stat-box .count { font-weight: 700; font-size: 16px; margin-bottom: 3px; }
         .stat-box .label { font-size: 13px; color: #a8a8a8; }
-
-        /* Bio */
+        
         .bio { font-size: 14px; line-height: 1.4; margin-bottom: 15px; }
         .bio-name { font-weight: 600; margin-bottom: 2px; }
         .followed-by { font-size: 12px; color: #a8a8a8; display: flex; align-items: center; gap: 10px; margin-top: 10px; }
         .mutual-pics { display: flex; }
         .mutual-pics div { width: 24px; height: 24px; border-radius: 50%; background: #444; border: 2px solid #000; margin-left: -10px; }
-        .mutual-pics div:first-child { margin-left: 0; }
-
-        /* Actions */
+        
         .action-btns { display: flex; gap: 8px; margin-bottom: 20px; }
-        .btn { flex: 1; background: #262626; color: #fff; font-weight: 600; font-size: 14px; padding: 8px; border-radius: 8px; border: none; text-align: center; }
+        .btn { flex: 1; background: #262626; color: #fff; font-weight: 600; font-size: 14px; padding: 8px; border-radius: 8px; border: none; }
         .btn-small { width: 40px; flex: none; }
 
-        /* Highlights */
         .highlights-container { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
         .highlight { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; }
         .hl-ring { width: 65px; height: 65px; border-radius: 50%; padding: 2px; border: 1px solid #555; display: flex; justify-content: center; align-items: center; }
         .hl-pic { width: 100%; height: 100%; border-radius: 50%; background: #333 center/cover; border: 2px solid #000; }
         .hl-name { font-size: 12px; }
-        
         #h1 .hl-pic { background-color: #ff7eb3; }
         #h2 .hl-pic { background-color: #8ab4f8; }
-        #h3 .hl-pic { background-color: #2ecc71; }
 
         .tabs { display: flex; border-top: 1px solid #262626; margin-top: 10px; }
         .tab { flex: 1; text-align: center; padding: 12px 0; border-bottom: 1px solid transparent; color: #888; }
         .tab.active { border-bottom: 1px solid #fff; color: #fff; }
-        
         .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 20px; text-align: center; }
         .empty-circle { width: 90px; height: 90px; border: 2px solid #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; font-size: 40px; }
-        
-        /* Highlight Viewer (Full Screen) */
-        #highlight-viewer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; display: none; flex-direction: column; }
+                /* Highlight Viewer (Story Style) */
+        #highlight-viewer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #111; z-index: 2000; display: none; flex-direction: column; }
         .viewer-header { display: flex; justify-content: space-between; padding: 15px; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); position: absolute; width: 100%; z-index: 10; }
-        .close-viewer { color: #fff; font-size: 24px; cursor: pointer; }
-        .content-area { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; background: #111; }
+        .close-viewer { color: #fff; font-size: 24px; cursor: pointer; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .story-progress { display: flex; gap: 4px; padding: 10px 15px 0 15px; position: absolute; top: 0; width: 100%; z-index: 11; }
+        .story-bar { flex: 1; height: 3px; background: rgba(255,255,255,0.4); border-radius: 2px; }
+        .story-bar.active { background: #fff; }
         
-        .hl-content-box { display: none; width: 100%; height: 100%; align-items: center; justify-content: center; color: #888; font-size: 14px; text-align: center; flex-direction: column; }
-        .hl-content-box img, .hl-content-box video { width: 100%; height: 100%; object-fit: contain; }
+        .content-area { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; }
+        #story-img { width: 100%; height: 100%; object-fit: contain; }
+        .tap-zone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; }
 
-        #move-further-btn { position: fixed; bottom: -80px; left: 50%; transform: translateX(-50%); background: linear-gradient(45deg, #d4af37, #ffdf00); color: #000; font-weight: 800; font-size: 16px; padding: 15px 40px; border-radius: 30px; z-index: 900; transition: 0.5s; text-decoration: none; box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); white-space: nowrap; }
+        /* Notification & Final Video */
+        #custom-notification { display: none; z-index: 2500; }
+        .noti-box { border: 2px solid #d4af37; background: rgba(10,10,10,0.95); box-shadow: 0 0 20px rgba(212,175,55,0.4); border-radius: 15px; padding: 30px 20px; width: 80%; text-align: center; animation: popIn 0.4s; }
+        .noti-title { color:#d4af37; margin-bottom: 15px; font-family: 'Dancing Script', cursive; font-size: 28px; }
+        .noti-text { font-family: 'Poppins', sans-serif; font-style: italic; border-left: 3px solid #ffdf00; padding-left: 12px; text-align: left; font-size: 15px; line-height: 1.6; color:#f0f0f0; }
+
+        #auto-vid-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:3000; flex-direction:column; justify-content:center; align-items:center; }
+        #move-further-btn { position: fixed; bottom: -80px; left: 50%; transform: translateX(-50%); background: linear-gradient(45deg, #d4af37, #ffdf00); color: #000; font-weight: 800; font-size: 16px; padding: 15px 40px; border-radius: 30px; z-index: 3500; transition: 0.5s; text-decoration: none; box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); white-space: nowrap; font-family: 'Poppins', sans-serif; }
     </style>
 </head>
 <body>
 
+    <!-- AESTHETIC APOLOGY MODAL -->
     <div id="apology-modal" class="overlay">
-        <div class="popup-box">
-            <div class="popup-text">Sorry as I have used some of ur pics without ur permission 😅🤍</div>
-            <button class="popup-btn" onclick="startInstaExperience()">It's okay</button>
+        <div id="apology-box">
+            <div class="apology-icon">🥺🤍</div>
+            <div class="apology-text">Sorry as I have used some of ur pics without ur permission... 😅🤍</div>
+            <button class="apology-btn" onclick="startInstaExperience()">It's okay</button>
         </div>
     </div>
 
-    <div id="step-modal" class="overlay" style="display: none;">
-        <div class="popup-box">
-            <div class="popup-text" id="step-text">Now click on the 2nd highlight</div>
-            <button class="popup-btn" onclick="document.getElementById('step-modal').style.display='none'">Okay</button>
+    <div id="custom-notification" class="overlay">
+        <div class="noti-box">
+            <div class="noti-title">Message for you ✨</div>
+            <div class="noti-text" id="noti-paragraph">Admin is typing...</div>
+            <button class="apology-btn" style="margin-top:25px;" onclick="playAutoVideo()">Read & Play</button>
         </div>
+    </div>
+
+    <div id="auto-vid-modal">
+        <video id="post-video" playsinline style="width:100%; max-height:80vh; object-fit:contain;"></video>
+        <button id="skip-vid-btn" class="apology-btn" style="margin-top:20px; width:200px; background: #333; color:#fff; display:none;" onclick="showFinalButton()">Ok move forward</button>
     </div>
 
     <div id="instruction-banner">Click on the highlights to go further 👇</div>
@@ -119,36 +171,29 @@
             </div>
         </div>
 
-        <div class="action-btns">
-            <button class="btn">Following ˅</button><button class="btn">Message</button><button class="btn btn-small">+👤</button>
-        </div>
+        <div class="action-btns"><button class="btn">Following ˅</button><button class="btn">Message</button><button class="btn btn-small">+👤</button></div>
 
         <div class="highlights-container">
             <div class="highlight" id="h1" onclick="openHighlight(1)"><div class="hl-ring"><div class="hl-pic"></div></div><div class="hl-name">🧿</div></div>
             <div class="highlight" id="h2" onclick="openHighlight(2)"><div class="hl-ring"><div class="hl-pic"></div></div><div class="hl-name">🥰</div></div>
-            <div class="highlight" id="h3" onclick="openHighlight(3)"><div class="hl-ring"><div class="hl-pic"></div></div><div class="hl-name">🤍</div></div>
         </div>
     </div>
 
     <div class="tabs"><div class="tab active">▦</div><div class="tab">▶</div><div class="tab">👤</div></div>
+    <div class="empty-state"><div class="empty-circle">📷</div><h2>No posts yet</h2></div>
 
-    <div class="empty-state">
-        <div class="empty-circle">📷</div><h2>No posts yet</h2>
-    </div>
+    <a href="final.html" id="move-further-btn">Ok move forward ✨</a>
 
-    <a href="final.html" id="move-further-btn">Move further ✨</a>
-
-    <!-- Highlight Viewer -->
+    <!-- Highlight Story Viewer -->
     <div id="highlight-viewer">
+        <div class="story-progress" id="story-progress"></div>
         <div class="viewer-header">
-            <div style="color:white; font-weight:bold;">Highlight <span id="hl-title"></span></div>
-            <div class="close-viewer" onclick="closeHighlight()">✕</div>
+            <div style="color:white; font-weight:bold; margin-top: 15px;">Highlight <span id="hl-title"></span></div>
+            <div class="close-viewer" style="margin-top: 15px;" onclick="closeHighlight()">✕</div>
         </div>
-        
         <div class="content-area">
-            <div id="content-h1" class="hl-content-box">Admin is uploading content...</div>
-            <div id="content-h2" class="hl-content-box">Admin is uploading content...</div>
-            <div id="content-h3" class="hl-content-box">Admin is uploading content...</div>
+            <img id="story-img" src="">
+            <div class="tap-zone" onclick="nextStoryContent()"></div>
         </div>
     </div>
 
@@ -156,38 +201,29 @@
         const firebaseConfig = { databaseURL: "https://sukoon11-default-rtdb.firebaseio.com/", projectId: "sukoon11" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-
         db.ref('birthday2026/liveQuotesState').set('Insta Page - Reached');
 
-        // LIVE INSTA SYNC FROM ADMIN
+        let postTextContent = "Keep going...";
+        let hlContents = { 1: [], 2: [] };
+        
         db.ref('birthday2026/instaData').on('value', (snap) => {
             const data = snap.val() || {};
             
-            // Sync Covers & DP
+            if(data.post_text) postTextContent = data.post_text;
+            if(data.post_vid) document.getElementById('post-video').src = data.post_vid;
+
             if(data.dp) document.querySelector('.profile-pic').style.backgroundImage = `url(${data.dp})`;
             if(data.hl1_cover) document.querySelector('#h1 .hl-pic').style.backgroundImage = `url(${data.hl1_cover})`;
             if(data.hl2_cover) document.querySelector('#h2 .hl-pic').style.backgroundImage = `url(${data.hl2_cover})`;
-            if(data.hl3_cover) document.querySelector('#h3 .hl-pic').style.backgroundImage = `url(${data.hl3_cover})`;
 
-            // Sync Inside Content (Video prioritised over image)
-            updateHighlightContent('content-h1', data.hl1_img, data.hl1_vid);
-            updateHighlightContent('content-h2', data.hl2_img, data.hl2_vid);
-            updateHighlightContent('content-h3', data.hl3_img, data.hl3_vid);
+            // Store multiple contents, filter out empties
+            hlContents[1] = [data.hl1_content1, data.hl1_content2, data.hl1_content3].filter(Boolean);
+            hlContents[2] = [data.hl2_content1, data.hl2_content2, data.hl2_content3].filter(Boolean);
         });
 
-        function updateHighlightContent(containerId, imgBase64, vidUrl) {
-            const container = document.getElementById(containerId);
-            if(vidUrl) {
-                container.innerHTML = `<video src="${vidUrl}" autoplay loop playsinline></video>`;
-            } else if(imgBase64) {
-                container.innerHTML = `<img src="${imgBase64}">`;
-            } else {
-                container.innerHTML = `Admin is uploading content...`;
-            }
-        }
-
-        let currentViewing = 0;
-        let viewedH1 = false; let viewedH2 = false; let viewedH3 = false;
+        let currentViewing = 0; 
+        let currentStoryIndex = 0;
+        let viewedH1 = false;
 
         function startInstaExperience() {
             document.getElementById('apology-modal').style.display = 'none';
@@ -195,52 +231,91 @@
             setTimeout(() => { document.getElementById('instruction-banner').style.top = '0'; }, 500);
         }
 
+        // Tap-to-Next Story Logic
         function openHighlight(num) {
-            if (num === 2 && !viewedH1) { alert("Please view the 1st highlight first!"); return; }
-            if (num === 3 && (!viewedH1 || !viewedH2)) { alert("Please view the 2nd highlight first!"); return; }
+            if (num === 2 && !viewedH1) { alert("Please view the 1st highlight first! 🧿"); return; }
+            
+            const contents = hlContents[num];
+            if(contents.length === 0) { alert("Admin is still uploading contents here..."); return; }
 
             currentViewing = num;
+            currentStoryIndex = 0;
+            
             document.getElementById('highlight-viewer').style.display = 'flex';
-            document.getElementById('hl-title').innerText = num;
+            document.getElementById('hl-title').innerText = (num === 1) ? '🧿' : '🥰';
             
-            document.getElementById('content-h1').style.display = 'none';
-            document.getElementById('content-h2').style.display = 'none';
-            document.getElementById('content-h3').style.display = 'none';
+            setupStoryBars(contents.length);
+            showStoryContent();
             
-            const currentBox = document.getElementById('content-h' + num);
-            currentBox.style.display = 'flex';
+            db.ref('birthday2026/liveQuotesState').set(`Insta Page - Watching Highlight ${num}`);
+        }
 
-            // Autoplay video if exists
-            const vid = currentBox.querySelector('video');
-            if(vid) vid.play().catch(e => console.log(e));
+        function setupStoryBars(count) {
+            const progressDiv = document.getElementById('story-progress');
+            progressDiv.innerHTML = '';
+            for(let i=0; i<count; i++) {
+                progressDiv.innerHTML += `<div class="story-bar" id="bar-${i}"></div>`;
+            }
+        }
 
-            db.ref('birthday2026/liveQuotesState').set('Insta Page - Watching Highlight ' + num);
+        function showStoryContent() {
+            const contents = hlContents[currentViewing];
+            document.getElementById('story-img').src = contents[currentStoryIndex];
+            
+            // Update progress bars
+            for(let i=0; i<contents.length; i++) {
+                const bar = document.getElementById(`bar-${i}`);
+                if(i <= currentStoryIndex) bar.classList.add('active');
+                else bar.classList.remove('active');
+            }
+        }
+
+        function nextStoryContent() {
+            const contents = hlContents[currentViewing];
+            if(currentStoryIndex < contents.length - 1) {
+                currentStoryIndex++;
+                showStoryContent();
+            } else {
+                closeHighlight();
+            }
         }
 
         function closeHighlight() {
             document.getElementById('highlight-viewer').style.display = 'none';
-            
-            // Stop video if playing
-            const currentBox = document.getElementById('content-h' + currentViewing);
-            const vid = currentBox.querySelector('video');
-            if(vid) vid.pause();
-
             db.ref('birthday2026/liveQuotesState').set('Insta Page - Closed Highlight ' + currentViewing);
             
-            if (currentViewing === 1) { viewedH1 = true; showStepPopup("Now click on the 2nd highlight 🥰"); }
-            else if (currentViewing === 2) { viewedH2 = true; showStepPopup("Now click on the 3rd highlight 🤍"); }
-            else if (currentViewing === 3) {
-                viewedH3 = true;
+            if (currentViewing === 1) { 
+                viewedH1 = true; 
+                document.getElementById('instruction-banner').innerText = "Now click on the 2nd highlight 🥰👇";
+            }
+            else if (currentViewing === 2) { 
                 document.getElementById('instruction-banner').style.top = '-60px'; 
-                setTimeout(() => { document.getElementById('move-further-btn').style.bottom = '30px'; }, 500);
+                document.getElementById('noti-paragraph').innerText = postTextContent;
+                document.getElementById('custom-notification').style.display = 'flex';
             }
         }
 
-        function showStepPopup(msg) {
-            document.getElementById('step-text').innerText = msg;
-            document.getElementById('step-modal').style.display = 'flex';
+        function playAutoVideo() {
+            document.getElementById('custom-notification').style.display = 'none';
+            document.getElementById('auto-vid-modal').style.display = 'flex';
+            
+            db.ref('birthday2026/liveQuotesState').set('Insta Page - Watching Surprise Video');
+            
+            const vid = document.getElementById('post-video');
+            vid.play().catch(() => { 
+                vid.controls = true; 
+                document.getElementById('skip-vid-btn').style.display = 'block'; 
+            });
+
+            vid.onended = showFinalButton;
+        }
+
+        function showFinalButton() {
+            document.getElementById('auto-vid-modal').style.display = 'none';
+            document.getElementById('move-further-btn').style.bottom = '30px';
+            db.ref('birthday2026/liveQuotesState').set('Insta Page - Ready to Move Forward');
         }
     </script>
 </body>
-    </html>
-    
+</html>
+        
