@@ -26,10 +26,10 @@
         .resp-label { color: #d4af37; font-size: 13px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;}
         .resp-text { color: #fff; font-size: 16px; white-space: pre-wrap; font-family: monospace;}
 
-        .upload-row { margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed #333; }
+        .upload-row { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed #333; }
         .flex-row { display: flex; gap: 10px; align-items: center; margin-top: 5px; }
         label { color: #aaa; font-size: 13px; font-weight: bold; display: block; margin-bottom: 5px; }
-        input[type="file"], input[type="text"], input[type="number"] { background: #2a2a2a; color: white; padding: 10px; border-radius: 8px; border: 1px solid #444; width: 100%; box-sizing: border-box; transition: 0.3s; }
+        input[type="file"], input[type="text"], textarea { background: #2a2a2a; color: white; padding: 10px; border-radius: 8px; border: 1px solid #444; width: 100%; box-sizing: border-box; transition: 0.3s; }
         input[type="file"]:hover { border-color: #d4af37; }
         
         button { background: #333; color: white; border: none; padding: 12px; font-size: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s; width: 100%; margin-top: 10px; }
@@ -37,19 +37,19 @@
         .primary-btn { background: linear-gradient(45deg, #d4af37, #ffdf00); color: #111; box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
         .danger-btn { background: linear-gradient(45deg, #ff4757, #ff6b81); color: white; }
         .action-btn { background: #3498db; }
-        .reset-btn { background: #e74c3c; border: 2px solid #c0392b; font-size: 16px; padding: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .reset-btn { background: rgba(231, 76, 60, 0.2); border: 2px solid #e74c3c; color: #ff4757; font-size: 16px; padding: 15px; text-transform: uppercase; letter-spacing: 1px; }
 
         .hl-card { background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 3px solid #555; }
     </style>
 </head>
 <body>
 
-    <h2><span class="live-indicator"></span>SUKOON ADMIN</h2>
+    <h2><span class="live-indicator"></span>SUKOON ADMIN LIVE</h2>
     
     <!-- 1. RESET BUTTON FOR TESTING -->
-    <div class="dashboard" style="background: rgba(231, 76, 60, 0.1); border-color: #e74c3c;">
+    <div class="dashboard" style="background: rgba(231, 76, 60, 0.05); border-color: #e74c3c;">
         <h3 style="color: #ff4757; border-bottom: none; margin-bottom: 0;">🛠 Testing Controls</h3>
-        <button onclick="resetAllTestData()" class="reset-btn">🧹 Reset All Test Data (Clear Responses)</button>
+        <button onclick="resetAllTestData()" class="reset-btn">🧹 Reset All Test Data (Clear Responses & Trackers)</button>
     </div>
 
     <!-- 2. MASTER LIVE TRACKER -->
@@ -76,15 +76,14 @@
         <div class="resp-box"><div class="resp-label">Dump Space:</div><div class="resp-text" id="resp-dump">Waiting...</div></div>
     </div>
 
-    <!-- 4. INSTAGRAM UPLOADS (MULTIPLE MEDIA) -->
+    <!-- 4. INSTAGRAM UPLOADS & POST NOTIFICATION -->
     <div class="dashboard">
         <h3>📸 Insta Page: Multi-Media Uploads</h3>
-        
         <div class="upload-row" style="border-bottom:none;"><label>Profile Picture (DP)</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/dp')"></div>
 
         <div class="hl-card" style="border-left-color: #ff7eb3;">
             <h4 style="margin:0 0 10px 0; color:#ff7eb3;">Highlight 1 (🧿)</h4>
-            <div class="upload-row"><label>Cover Image (Outside Ring)</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl1_cover')"></div>
+            <div class="upload-row"><label>Cover Image (Outside)</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl1_cover')"></div>
             <div class="upload-row"><label>Inside Content 1</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl1_content1')"></div>
             <div class="upload-row"><label>Inside Content 2</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl1_content2')"></div>
             <div class="upload-row" style="border:none;"><label>Inside Content 3</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl1_content3')"></div>
@@ -92,21 +91,27 @@
 
         <div class="hl-card" style="border-left-color: #8ab4f8;">
             <h4 style="margin:0 0 10px 0; color:#8ab4f8;">Highlight 2 (🥰)</h4>
-            <div class="upload-row"><label>Cover Image (Outside Ring)</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl2_cover')"></div>
+            <div class="upload-row"><label>Cover Image (Outside)</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl2_cover')"></div>
             <div class="upload-row"><label>Inside Content 1</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl2_content1')"></div>
             <div class="upload-row"><label>Inside Content 2</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl2_content2')"></div>
             <div class="upload-row" style="border:none;"><label>Inside Content 3</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl2_content3')"></div>
         </div>
 
-        <div class="hl-card" style="border-left-color: #2ecc71;">
-            <h4 style="margin:0 0 10px 0; color:#2ecc71;">Highlight 3 (🤍)</h4>
-            <div class="upload-row"><label>Cover Image (Outside Ring)</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl3_cover')"></div>
-            <div class="upload-row"><label>Inside Content 1</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl3_content1')"></div>
-            <div class="upload-row"><label>Inside Content 2</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl3_content2')"></div>
-            <div class="upload-row" style="border:none;"><label>Inside Content 3</label><input type="file" accept="image/*" onchange="uploadImage(event, 'instaData/hl3_content3')"></div>
+        <div class="hl-card" style="border-left-color: #f39c12; background: #2b2210;">
+            <h4 style="margin:0 0 10px 0; color:#f39c12;">📬 Post-Highlight Action (Shows after H2 closes)</h4>
+            <div class="upload-row">
+                <label>Custom Notification Text (Paragraph inside border)</label>
+                <textarea id="post-text" rows="3" placeholder="Type notification text here..."></textarea>
+                <button class="primary-btn" onclick="syncPostData('text')">Sync Text</button>
+            </div>
+            <div class="upload-row" style="border:none;">
+                <label>Auto-Play Video URL (Plays after they click OK on text)</label>
+                <input type="text" id="post-vid" placeholder="Paste .mp4 link here (e.g. from Discord/Drive)">
+                <button class="primary-btn" onclick="syncPostData('vid')">Sync Video URL</button>
+            </div>
         </div>
-    </div>
-    <!-- 5. QUOTES PAGE VISUALS & MUSIC UPLOAD -->
+            </div>
+                        <!-- 5. QUOTES PAGE VISUALS & MUSIC UPLOAD -->
     <div class="dashboard">
         <h3>✨ Quotes Page: Visuals & Audio File</h3>
         
@@ -118,18 +123,20 @@
 
         <div class="upload-row">
             <label>Upload Aesthetic Song (MP3 File) 🎵</label>
-            <p style="font-size: 11px; color:#ff4757; margin-top:0;">*Note: Keep file size small (under 2MB / 30-40 seconds) to prevent lag!</p>
+            <p style="font-size: 11px; color:#ff4757; margin-top:0;">*Note: Keep file size small (under 2MB / 30 secs) to prevent lag!</p>
             <input type="file" accept="audio/mp3, audio/mpeg" onchange="uploadAudio(event)">
         </div>
         
-        <button class="primary-btn" onclick="playQuotesMusic()">▶ PLAY MUSIC (Starts on Her Phone)</button>
-        <button class="danger-btn" onclick="stopQuotesMusic()">⏸ STOP MUSIC</button>
+        <div class="flex-row">
+            <button class="primary-btn" onclick="playQuotesMusic()">▶ PLAY MUSIC</button>
+            <button class="danger-btn" onclick="stopQuotesMusic()">⏸ STOP MUSIC</button>
+        </div>
     </div>
 
     <!-- 6. DINO GAME CONTROLS -->
     <div class="dashboard">
         <h3>🦖 Dino Game: Secret Overrides</h3>
-        <button onclick="sendDinoCommand('start')" class="action-btn">Force Start Game (If stuck)</button>
+        <button onclick="sendDinoCommand('start')" class="action-btn">Force Start Game</button>
         <button onclick="sendDinoCommand('trigger_birthday')" class="primary-btn">Direct Skip to 17 Cake</button>
         <button onclick="sendDinoCommand('reset')" class="danger-btn">Force Reload Her Page</button>
     </div>
@@ -145,21 +152,35 @@
 
         let latestQuotesState = "";
 
-        // ---------------- RESET TEST DATA ---------------- //
+        // ---------------- 1. RESET ALL TEST DATA ---------------- //
         function resetAllTestData() {
-            if(confirm("Are you sure you want to clear all her responses and reset the tracker?")) {
+            if(confirm("Are you 100% sure you want to clear all her responses and reset the tracker to start fresh?")) {
                 db.ref('birthday2026/userResponses').remove();
                 db.ref('birthday2026/liveQuotesState').set('Data Reset. Waiting for her to open link...');
                 db.ref('birthday2026/liveState').remove();
-                alert("All Test Data Wiped Successfully! 🧹");
+                alert("All Test Data Wiped Successfully! 🧹 You can start fresh now.");
             }
         }
 
-        // ---------------- MASTER LIVE TRACKER ---------------- //
+        // ---------------- 2. POST-HIGHLIGHT DATA SYNC ---------------- //
+        function syncPostData(type) {
+            if(type === 'text') {
+                const txt = document.getElementById('post-text').value;
+                if(!txt) return alert("Text cannot be empty!");
+                db.ref('birthday2026/instaData/post_text').set(txt).then(()=>alert("Notification Text Synced!"));
+            } else {
+                const vid = document.getElementById('post-vid').value;
+                if(!vid) return alert("URL cannot be empty!");
+                db.ref('birthday2026/instaData/post_vid').set(vid).then(()=>alert("Auto-play Video URL Synced!"));
+            }
+        }
+
+        // ---------------- 3. MASTER LIVE TRACKERS ---------------- //
         db.ref('birthday2026/liveState').on('value', (snap) => {
             const data = snap.val();
             if (data) {
                 document.getElementById('current-score').innerText = `${data.score || 0} / 17`;
+                // Only show Dino if Quotes/Insta hasn't started
                 if(!latestQuotesState || latestQuotesState.includes("Waiting") || latestQuotesState.includes("Reset")) {
                     document.getElementById('current-screen').innerText = "Dino Game: " + (data.screen || "");
                     document.getElementById('current-screen').style.color = "#8ab4f8";
@@ -174,15 +195,20 @@
                 const screenEl = document.getElementById('current-screen');
                 screenEl.innerText = state;
                 
-                // Color coding
-                if(state.includes("Final Story") || state.includes("Replaying") || state.includes("Downloading")) screenEl.style.color = "#ffdf00";
-                else if(state.includes("Insta Page")) screenEl.style.color = "#e1306c";
-                else if(state.includes("Reset")) screenEl.style.color = "#ff4757";
-                else screenEl.style.color = "#2ecc71";
+                // Dynamic Color Coding for Tracker
+                if(state.includes("Final Story") || state.includes("Replaying") || state.includes("Downloading")) {
+                    screenEl.style.color = "#ffdf00"; // Gold for final parts
+                } else if(state.includes("Insta Page")) {
+                    screenEl.style.color = "#e1306c"; // Pink for Insta
+                } else if(state.includes("Reset")) {
+                    screenEl.style.color = "#ff4757"; // Red for Reset
+                } else {
+                    screenEl.style.color = "#2ecc71"; // Green for Quotes
+                }
             }
         });
 
-        // ---------------- HER LIVE RESPONSES ---------------- //
+        // ---------------- 4. HER LIVE RESPONSES ---------------- //
         db.ref('birthday2026/userResponses').on('value', (snap) => {
             const data = snap.val() || {};
             document.getElementById('resp-story').innerText = data.storyChoice || 'Waiting...';
@@ -193,26 +219,29 @@
             document.getElementById('resp-dump').innerText = data.dumpSpace || 'Waiting...';
         });
 
-        // ---------------- IMAGE COMPRESSOR & UPLOADER ---------------- //
+        // ---------------- 5. UPLOADERS (IMAGE & AUDIO) ---------------- //
         function uploadImage(event, dbPath) {
             const file = event.target.files[0];
             if(!file) return;
 
-            event.target.style.borderColor = "#f39c12"; // Loading color
+            event.target.style.borderColor = "#f39c12"; // Loading
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
                     let width = img.width; let height = img.height;
+                    
+                    // Compress if height > 1000px
                     if (height > 1000) { width *= 1000 / height; height = 1000; }
+                    
                     canvas.width = width; canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
                     
                     const base64Data = canvas.toDataURL('image/jpeg', 0.6); 
                     db.ref('birthday2026/' + dbPath).set(base64Data)
-                      .then(() => { event.target.style.borderColor = "#2ecc71"; alert(`Image Uploaded successfully to ${dbPath}`); })
+                      .then(() => { event.target.style.borderColor = "#2ecc71"; alert(`Uploaded to ${dbPath}`); })
                       .catch(err => { event.target.style.borderColor = "#ff4757"; alert("Upload failed: " + err.message); });
                 }
                 img.src = e.target.result;
@@ -220,38 +249,34 @@
             reader.readAsDataURL(file);
         }
 
-        // ---------------- AUDIO UPLOADER (DIRECT FILE) ---------------- //
         function uploadAudio(event) {
             const file = event.target.files[0];
             if(!file) return;
             
-            // Check file size (Warn if > 2MB)
             if(file.size > 2 * 1024 * 1024) {
-                alert("File is quite large (" + (file.size/1024/1024).toFixed(2) + "MB). It might cause lag on her phone. Consider trimming it.");
+                alert("Warning: File is larger than 2MB. It might cause lag on her phone.");
             }
 
             event.target.style.borderColor = "#f39c12";
             const reader = new FileReader();
             reader.onload = function(e) {
-                const base64Audio = e.target.result;
-                db.ref('birthday2026/quotesData/songBase64').set(base64Audio)
+                db.ref('birthday2026/quotesData/songBase64').set(e.target.result)
                   .then(() => { event.target.style.borderColor = "#2ecc71"; alert("Audio Track Uploaded Successfully! 🎵"); })
-                  .catch(err => { event.target.style.borderColor = "#ff4757"; alert("Audio Upload failed (might be too big). Try a smaller MP3 file."); });
+                  .catch(err => { event.target.style.borderColor = "#ff4757"; alert("Upload failed. File might be too large."); });
             }
             reader.readAsDataURL(file);
         }
 
+        // ---------------- 6. MUSIC CONTROLS ---------------- //
         function playQuotesMusic() { db.ref('birthday2026/liveCommandQuotes').set('play_music'); alert("Play command sent!"); }
         function stopQuotesMusic() { db.ref('birthday2026/liveCommandQuotes').set('stop_music'); }
 
-        // ---------------- DINO GAME CONTROLS ---------------- //
-        function sendDinoCommand(cmd) {
+        // ---------------- 7. DINO GAME CONTROLS ---------------- //
+        function sendDinoCommand(cmd) { 
             db.ref('birthday2026/liveCommand').set(cmd).then(() => {
-                setTimeout(() => db.ref('birthday2026/liveCommand').set('idle'), 1500);
-            });
+                setTimeout(() => db.ref('birthday2026/liveCommand').set('idle'), 1500); 
+            }); 
         }
     </script>
 </body>
 </html>
-
-    
