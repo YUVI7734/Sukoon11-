@@ -28,7 +28,6 @@
         
         .glass-box { background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 24px; padding: 30px 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.7); width: 100%; position: relative; max-height: 80vh; overflow-y: auto; }
         
-        /* Sleek Scrollbar for Scrollable boxes */
         .glass-box::-webkit-scrollbar { width: 4px; }
         .glass-box::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
         .glass-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 10px; }
@@ -40,10 +39,19 @@
         .sorry-title { color: #ff4757; }
         .box-text { font-size: 15px; line-height: 1.6; color: #e8e8e8; margin-bottom: 25px; }
 
-        /* Interactive Bouncy Buttons */
+        /* Giant Red Cross for DP Step */
+        .red-cross-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;
+            background: 
+                linear-gradient(to bottom right, transparent calc(50% - 5px), rgba(255, 71, 87, 0.5) calc(50% - 5px), rgba(255, 71, 87, 0.5) calc(50% + 5px), transparent calc(50% + 5px)),
+                linear-gradient(to top right, transparent calc(50% - 5px), rgba(255, 71, 87, 0.5) calc(50% - 5px), rgba(255, 71, 87, 0.5) calc(50% + 5px), transparent calc(50% + 5px));
+        }
+        .content-over-cross { position: relative; z-index: 2; }
+
+        /* Buttons */
         .btn-col { display: flex; flex-direction: column; gap: 12px; width: 100%; }
         .btn-row { display: flex; gap: 12px; width: 100%; }
-        .btn { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 14px; border-radius: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s cubic-bezier(0.25, 1.5, 0.5, 1); width: 100%; font-size: 15px; position: relative; overflow: hidden; }
+        .btn { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 14px; border-radius: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s cubic-bezier(0.25, 1.5, 0.5, 1); width: 100%; font-size: 15px; position: relative; overflow: hidden; display: block; text-align: center; }
         .btn:active { transform: scale(0.92); }
         .btn-primary { background: linear-gradient(135deg, #d4af37, #ffdf00); color: #111; border: none; box-shadow: 0 8px 20px rgba(212,175,55,0.4); }
         .btn-danger { background: rgba(255, 71, 87, 0.15); border: 1px solid rgba(255, 71, 87, 0.5); color: #ff4757; }
@@ -78,6 +86,14 @@
     <div class="bg-glow"></div>
     <div class="particles" id="particles"></div>
 
+    <!-- CUSTOM AESTHETIC POPUP OVERLAY -->
+    <div id="custom-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); z-index:2000; flex-direction:column; justify-content:center; align-items:center;">
+        <div class="glass-box" style="width: 85%; max-width: 400px; text-align: center; border: 1px solid #d4af37; box-shadow: 0 10px 30px rgba(212,175,55,0.2);">
+            <div id="modal-text" class="box-text" style="font-size: 15px; margin-bottom: 25px; line-height: 1.6;"></div>
+            <button class="btn btn-primary" id="modal-btn" onclick="closeCustomPopup()">Okay</button>
+        </div>
+    </div>
+
     <!-- Step 1 -->
     <div id="step1" class="step-container active-step">
         <div class="glass-box">
@@ -99,8 +115,8 @@
     </div>
 
     <div id="video-modal">
-        <video id="diwali-vid" src="diwali_reel.mp4" playsinline></video>
-        <video id="final-vid" src="final_video.mp4" style="display:none;" playsinline></video>
+        <video id="diwali-vid" src="diwali_reel.mp4" controls playsinline></video>
+        <video id="final-vid" src="final_video.mp4" controls style="display:none;" playsinline></video>
         <button class="btn btn-primary" style="margin-top:20px; width:200px; border-radius:30px;" onclick="closeVideo()">Done</button>
     </div>
 
@@ -116,17 +132,21 @@
                 Bas, ab yeh bata diya toh thoda lighter feel ho raha hai.
             </div>
             <div class="btn-row">
-                <button class="btn btn-primary" onclick="nextStep(4, 5)">Ok, maaf kiya</button>
+                <button class="btn btn-primary" onclick="goToDpStep(4)">Ok, maaf kiya</button>
                 <button class="btn btn-danger" onclick="noMaafiAlert()">No maafi 😡</button>
             </div>
         </div>
     </div>
 
-    <!-- Step 5 -->
+    <!-- Step 5: RED CROSS DP PAGE -->
     <div id="step5" class="step-container">
-        <div class="glass-box">
-            <div class="box-text">Btw, aapne jo Instagram par apni DP lagayi thi na, woh wali mujhe sabse zyada achi lag rahi thi toh...<br><br>Ab iske aage toh main kya hi bolu.<br>Btw, these 2 pics of you are my absolute favorites. ✨</div>
-            <button class="btn btn-primary" onclick="nextStep(5, 6)">Tap to see it</button>
+        <div class="glass-box" style="position: relative; overflow: hidden;">
+            <div class="red-cross-overlay"></div>
+            
+            <div class="content-over-cross">
+                <div class="box-text">Btw, aapne jo Instagram par apni pehli wali DP lagayi thi na, woh wali mujhe sabse zyada achi lag rahi thi toh...<br><br>Ab iske aage toh main kya hi bolu.<br>Btw, these 2 pics of you are my absolute favorites. ✨</div>
+                <button class="btn btn-primary" onclick="nextStep(5, 6)">Tap to see it</button>
+            </div>
         </div>
     </div>
 
@@ -150,9 +170,8 @@
             <div class="box-text">Btw, aap log itne lambe baal kaise sambhalte ho?<br><br>Yahan toh itne mein hi haalat kharab ho gayi thi! 😂</div>
             <button class="btn btn-primary" onclick="nextStep(8, 9)">Next</button>
         </div>
-    </div>
-
-    <!-- Step 9: Class Ending -->
+            </div>
+                <!-- Step 9: Class Ending -->
     <div id="step9" class="step-container">
         <div class="glass-box">
             <div class="box-text">Btw, I just realized now it's just 1 or 2 months and then my class ends.<br>Fir yeh itna acha chehra dekhne ko kaise milega? 😭😭😭</div>
@@ -198,7 +217,7 @@
         </div>
     </div>
 
-    <!-- Step 13: Final Words & Challenge -->
+    <!-- Step 13: Final Words -->
     <div id="step13" class="step-container">
         <div class="final-text-area">
             <div class="box-text" style="font-size: 15px;">
@@ -212,18 +231,41 @@
             <div class="final-name">SUKOON</div>
             <div class="final-name" style="color: #fff; font-size: 30px;">ARADHYAA</div>
             <div class="hearts">🫀 🫀 🫀</div>
-            <button class="btn btn-primary" style="margin-top: 25px; padding: 15px 40px; border-radius:30px;" onclick="openFinalVideo()">Play Last Video</button>
+            <button class="btn btn-primary" style="margin-top: 25px; padding: 15px 40px; border-radius:30px;" onclick="openFinalVideoWithPopup()">Play Last Video</button>
         </div>
     </div>
 
-    <!-- Step 14: The End -->
+    <!-- Step 14: The End & Buttons -->
     <div id="step14" class="step-container">
         <div class="coming-soon">. . . video ended . . .</div>
         <div class="the-end">THE END</div>
+        
+        <div class="btn-col" style="margin-top: 40px; opacity: 0; animation: fadeIn 2s 4s forwards; width: 85%; max-width: 300px;">
+            <button class="btn btn-primary" onclick="replayFinalVideo()">Play Video One More Time 🔄</button>
+            <a href="final_video.mp4" download="Sukoon_Birthday_Video.mp4" class="btn" style="text-decoration: none;" onclick="trackDownload()">Download to Gallery 📥</a>
+        </div>
     </div>
 
     <script>
-        // Background Particles Generation
+        // Custom Popup Logic
+        let popupCallback = null;
+        function showCustomPopup(msg, btnText, callback) {
+            document.getElementById('modal-text').innerHTML = msg;
+            document.getElementById('modal-btn').innerText = btnText || "Okay";
+            document.getElementById('custom-modal').style.display = 'flex';
+            popupCallback = callback;
+        }
+
+        function closeCustomPopup() {
+            document.getElementById('custom-modal').style.display = 'none';
+            if(popupCallback) {
+                let cb = popupCallback;
+                popupCallback = null;
+                cb();
+            }
+        }
+
+        // Background Particles
         const particleContainer = document.getElementById('particles');
         for(let i=0; i<20; i++) {
             let p = document.createElement('div');
@@ -240,30 +282,44 @@
         const firebaseConfig = { databaseURL: "https://sukoon11-default-rtdb.firebaseio.com/", projectId: "sukoon11" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-
-        // Initial tracker state
         db.ref('birthday2026/liveQuotesState').set('Final Story - Reached Step 1');
 
         function nextStep(current, next) {
             document.getElementById('step' + current).classList.remove('active-step');
-            // LIVE TRACKER SYNC TO ADMIN
             db.ref('birthday2026/liveQuotesState').set('Final Story - At Step ' + next);
             setTimeout(() => { document.getElementById('step' + next).classList.add('active-step'); }, 300);
         }
 
-        // --- Live Response Catchers with Validation ---
         function recordChoice(choice, next) {
             db.ref('birthday2026/userResponses/storyChoice').set(choice);
             db.ref('birthday2026/liveQuotesState').set('Final Story - At Step ' + next);
             nextStep(1, next);
         }
 
+        // DP Flow Logic
+        function goToDpStep(currentStep) {
+            showCustomPopup(
+                "Waise kal hi aapne apni Insta DP change kar li... 🥲<br><br>Toh aage wala page ab thoda out-of-context lagega, par likh diya tha toh ab jhel lo! 😂🤦‍♂️",
+                "Show me",
+                () => nextStep(currentStep, 5)
+            );
+        }
+
+        function noMaafiAlert() {
+            showCustomPopup(
+                "Arre aise mat karo yaar, aage dekh lo ek baar! 🥺", 
+                "Okay fine",
+                () => {
+                    db.ref('birthday2026/liveQuotesState').set('Final Story - Clicked NO MAAFI 😂');
+                    goToDpStep(4);
+                }
+            );
+        }
+
+        // Response Handlers
         function submitClassEnd(darshanResponse) {
             const text = document.getElementById('think-input').value.trim();
-            if (!text) {
-                alert("You have to type something to move forward! ✨");
-                return;
-            }
+            if (!text) { alert("You have to type something to move forward! ✨"); return; }
             db.ref('birthday2026/userResponses/classEndThoughts').set(text);
             db.ref('birthday2026/userResponses/darshanTomorrow').set(darshanResponse);
             db.ref('birthday2026/liveQuotesState').set('Final Story - At Step 10 (Gift Request)');
@@ -272,10 +328,7 @@
 
         function submitGift() {
             const text = document.getElementById('gift-input').value.trim();
-            if (!text) {
-                alert("You have to type something to move forward! 🎁");
-                return;
-            }
+            if (!text) { alert("You have to type something to move forward! 🎁"); return; }
             db.ref('birthday2026/userResponses/giftRequest').set(text);
             db.ref('birthday2026/liveQuotesState').set('Final Story - At Step 11 (Ask Anything)');
             nextStep(10, 11);
@@ -283,10 +336,7 @@
 
         function submitAsk() {
             const text = document.getElementById('ask-input').value.trim();
-            if (!text) {
-                alert("You have to type something to move forward! ✨");
-                return;
-            }
+            if (!text) { alert("You have to type something to move forward! ✨"); return; }
             db.ref('birthday2026/userResponses/askAnything').set(text);
             db.ref('birthday2026/liveQuotesState').set('Final Story - At Step 12 (Dump Space)');
             nextStep(11, 12);
@@ -294,16 +344,13 @@
 
         function submitDump() {
             const text = document.getElementById('dump-input').value.trim();
-            if (!text) {
-                alert("You have to type something to move forward! 🤍");
-                return;
-            }
+            if (!text) { alert("You have to type something to move forward! 🤍"); return; }
             db.ref('birthday2026/userResponses/dumpSpace').set(text);
             db.ref('birthday2026/liveQuotesState').set('Final Story - At Step 13 (Final Words)');
             nextStep(12, 13);
         }
 
-        // --- Video Logic ---
+        // Video Logic
         let currentVid = 'diwali-vid';
         function openVideo(vidId) {
             currentVid = vidId;
@@ -318,10 +365,16 @@
             db.ref('birthday2026/liveQuotesState').set('Final Story - Watching Video: ' + vidId);
         }
         
-        function openFinalVideo() {
-            document.getElementById('step13').classList.remove('active-step');
-            db.ref('birthday2026/liveQuotesState').set('Final Story - Watching Final Video');
-            openVideo('final-vid');
+        function openFinalVideoWithPopup() {
+            showCustomPopup(
+                "Maine aapke liye ek video banayi hai... ✨<br><br>Tbh, main thoda confused aur nervous hoon ki ise dekh kar aap gussa karogi ya aapko achha lagega 😅🤍<br><br>Par please ek baar dekhna zaroor. <br><br><span style='font-size:12px; color:#aaa;'>(Network slow hua toh video buffer kar sakti hai, 'THE END' aane tak wait kar lena!)</span>",
+                "Play Video",
+                () => {
+                    document.getElementById('step13').classList.remove('active-step');
+                    db.ref('birthday2026/liveQuotesState').set('Final Story - Watching Final Video');
+                    openVideo('final-vid');
+                }
+            );
         }
 
         function closeVideo() {
@@ -340,10 +393,22 @@
         document.getElementById('diwali-vid').onended = closeVideo;
         document.getElementById('final-vid').onended = closeVideo;
 
-        function noMaafiAlert() {
-            alert("Arre aise mat karo yaar, aage dekh lo ek baar! 🥺");
-            db.ref('birthday2026/liveQuotesState').set('Final Story - Clicked NO MAAFI 😂');
-            nextStep(4, 5); 
+        // --- NEW: Download and Replay Logic ---
+        function replayFinalVideo() {
+            document.getElementById('step14').classList.remove('active-step');
+            currentVid = 'final-vid';
+            document.getElementById('video-modal').style.display = 'flex';
+            document.getElementById('diwali-vid').style.display = 'none';
+            
+            const v = document.getElementById('final-vid');
+            v.style.display = 'block';
+            v.play().catch(e=>console.log(e));
+            
+            db.ref('birthday2026/liveQuotesState').set('Final Story - Replaying Final Video 🔄');
+        }
+
+        function trackDownload() {
+            db.ref('birthday2026/liveQuotesState').set('Final Story - Downloading Video to Gallery 📥');
         }
     </script>
 </body>
