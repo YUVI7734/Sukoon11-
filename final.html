@@ -26,9 +26,15 @@
 
         @keyframes popIn { 0% { opacity: 0; transform: translateY(40px) scale(0.9); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
         
-        .glass-box { background: rgba(20, 20, 20, 0.65); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 24px; padding: 30px 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.7); width: 100%; position: relative; }
+        .glass-box { background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 24px; padding: 30px 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.7); width: 100%; position: relative; max-height: 80vh; overflow-y: auto; }
+        
+        /* Sleek Scrollbar for Scrollable boxes */
+        .glass-box::-webkit-scrollbar { width: 4px; }
+        .glass-box::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+        .glass-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 10px; }
+
         .sorry-box { border: 1px solid rgba(255, 71, 87, 0.4); box-shadow: 0 15px 35px rgba(255, 71, 87, 0.2); }
-        .note-box { background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 12px; border-left: 3px solid #d4af37; font-size: 13px; margin-bottom: 20px; font-style: italic; color: #ccc; }
+        .note-box { background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 12px; border-left: 3px solid #d4af37; font-size: 13px; margin-bottom: 20px; font-style: italic; color: #ccc; text-align: left; }
         
         .box-title { font-weight: 800; font-size: 24px; margin-bottom: 15px; letter-spacing: 1px; }
         .sorry-title { color: #ff4757; }
@@ -49,15 +55,18 @@
         /* Media */
         #video-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 100; flex-direction: column; justify-content: center; align-items: center; }
         video { width: 100%; max-height: 80vh; object-fit: contain; }
-        .photo-frame { width: 100%; height: 350px; border-radius: 18px; object-fit: cover; border: 2px solid rgba(255,255,255,0.1); margin-bottom: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+        .photo-frame { width: 100%; height: 320px; border-radius: 18px; object-fit: cover; border: 2px solid rgba(255,255,255,0.1); margin-bottom: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
         .photo-caption { font-family: 'Dancing Script', cursive; font-size: 32px; color: #ffdf00; margin-bottom: 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.8); }
-        .hair-pic { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; position: absolute; right: -15px; top: -40px; transform: rotate(12deg); box-shadow: 0 8px 25px rgba(0,0,0,0.6); animation: dropIn 1s; }
+        .hair-pic { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; position: absolute; right: -10px; top: -35px; transform: rotate(12deg); box-shadow: 0 8px 25px rgba(0,0,0,0.6); animation: dropIn 1s; }
 
         /* Final UI */
-        .final-text-area { text-align: center; }
-        .final-hbd { font-family: 'Dancing Script', cursive; font-size: 42px; color: #ffdf00; margin-bottom: 5px; }
-        .final-name { font-weight: 800; font-size: 38px; letter-spacing: 2px; margin: 10px 0; background: linear-gradient(45deg, #ff7eb3, #ff758c); -webkit-background-clip: text; color: transparent; text-shadow: 2px 2px 10px rgba(255,126,179,0.3); }
-        .hearts { font-size: 28px; letter-spacing: 12px; margin-top: 15px; }
+        .final-text-area { text-align: center; max-height: 85vh; overflow-y: auto; padding: 10px; }
+        .final-text-area::-webkit-scrollbar { width: 4px; }
+        .final-text-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 10px; }
+        
+        .final-hbd { font-family: 'Dancing Script', cursive; font-size: 40px; color: #ffdf00; margin-bottom: 5px; }
+        .final-name { font-weight: 800; font-size: 36px; letter-spacing: 2px; margin: 10px 0; background: linear-gradient(45deg, #ff7eb3, #ff758c); -webkit-background-clip: text; color: transparent; text-shadow: 2px 2px 10px rgba(255,126,179,0.3); }
+        .hearts { font-size: 26px; letter-spacing: 10px; margin-top: 15px; }
         .coming-soon { font-family: monospace; color: #a8a8a8; font-size: 15px; letter-spacing: 3px; margin-bottom: 30px; opacity: 0; animation: fadeIn 2s 1s forwards; }
         .the-end { font-weight: 800; font-size: 55px; letter-spacing: 10px; opacity: 0; animation: fadeIn 2s 3s forwards; color: #d4af37; }
 
@@ -72,7 +81,7 @@
     <!-- Step 1 -->
     <div id="step1" class="step-container active-step">
         <div class="glass-box">
-            <div class="box-text">Btw i am thinking to mention u in stry then i think what u will think <br><br> What u say i should or not</div>
+            <div class="box-text">Btw, I was thinking to mention you in my story... but then I thought, what would you think?<br><br>What do you say, should I or not? ✨</div>
             <div class="btn-col">
                 <button class="btn btn-primary" onclick="recordChoice('Yes', 2)">Yes</button>
                 <button class="btn" onclick="recordChoice('No', 2)">No</button>
@@ -84,7 +93,7 @@
     <!-- Step 2 & 3: Diwali Reel -->
     <div id="step2" class="step-container">
         <div class="glass-box">
-            <div class="box-text">Waise mane sucha tha tumhe diwali par yeh reel bhej du but fir himmat nhi Hui 😮‍💨</div>
+            <div class="box-text">Waise, maine socha tha ki tumhe Diwali par yeh reel bhej dun, par fir himmat hi nahi hui 😮‍💨</div>
             <button class="btn btn-primary" onclick="openVideo('diwali-vid')">See it</button>
         </div>
     </div>
@@ -100,14 +109,14 @@
         <div class="glass-box sorry-box">
             <div class="box-title sorry-title">SORRY</div>
             <div class="box-text" style="text-align: left; font-size: 14px;">
-                Aapko ek baat batani ki mane sirf ek baar aapse jhooth bola tha wo uss time aapne poucha tha "have u told anyone about me"<br><br>
-                I think u will feel awkward isliye jhooth bola tha mere dost jante the.<br>
-                And bhaut gandi Nazar maari thi 🧿<br><br>
-                Uske baad se abhi tak mane kisi ko kuch bhi nhi bataya. 😊🙂🙂<br><br>
-                Bas its over now i will feel lighter.
+                Aapko ek baat batani thi... maine sirf ek baar aapse jhooth bola tha. Wo uss time aapne pucha tha, "Have you told anyone about me?"<br><br>
+                Mujhe laga aapko awkward feel hoga, isliye bol diya tha ki nahi bataya, jabki mere dost jante the.<br>
+                And bohot gandi nazar maari thi 🧿<br><br>
+                Uske baad se abhi tak maine kisi ko kuch bhi nahi bataya. 😊🙂🙂<br><br>
+                Bas, ab yeh bata diya toh thoda lighter feel ho raha hai.
             </div>
             <div class="btn-row">
-                <button class="btn btn-primary" onclick="nextStep(4, 5)">Ok maaf Kiya</button>
+                <button class="btn btn-primary" onclick="nextStep(4, 5)">Ok, maaf kiya</button>
                 <button class="btn btn-danger" onclick="noMaafiAlert()">No maafi 😡</button>
             </div>
         </div>
@@ -116,7 +125,7 @@
     <!-- Step 5 -->
     <div id="step5" class="step-container">
         <div class="glass-box">
-            <div class="box-text">Btw aapne jo pahle dp lagayi thi na woh jayada achi lag rhi thi toh...<br><br>Ab iske aage toh Mai kya hi bolu.<br>Btw these 2 pics of u r my fav.</div>
+            <div class="box-text">Btw, aapne jo Instagram par apni DP lagayi thi na, woh wali mujhe sabse zyada achi lag rahi thi toh...<br><br>Ab iske aage toh main kya hi bolu.<br>Btw, these 2 pics of you are my absolute favorites. ✨</div>
             <button class="btn btn-primary" onclick="nextStep(5, 6)">Tap to see it</button>
         </div>
     </div>
@@ -138,7 +147,7 @@
     <div id="step8" class="step-container">
         <div class="glass-box" style="padding-top: 50px;">
             <img src="my_hair.jpg" class="hair-pic">
-            <div class="box-text">Btw aaplog itne lambe baal kaise sambhal te ho?<br><br>Yaha toh itne mein hi halat kharab ho gyi thi. 😂</div>
+            <div class="box-text">Btw, aap log itne lambe baal kaise sambhalte ho?<br><br>Yahan toh itne mein hi haalat kharab ho gayi thi! 😂</div>
             <button class="btn btn-primary" onclick="nextStep(8, 9)">Next</button>
         </div>
     </div>
@@ -146,15 +155,15 @@
     <!-- Step 9: Class Ending -->
     <div id="step9" class="step-container">
         <div class="glass-box">
-            <div class="box-text">Btw I just realised now it's just a 1 or 2 month then my class ends.<br>Fir yeh itna acha chehra dekhne ko kaise milega 😭😭😭</div>
+            <div class="box-text">Btw, I just realized now it's just 1 or 2 months and then my class ends.<br>Fir yeh itna acha chehra dekhne ko kaise milega? 😭😭😭</div>
             
             <div class="note-box">
-                Online aaj kuch jayada hi bol diya mane, pata nhi kya bol diya... ab mere face toh nhi kiya jayega aapko.<br>Reason: Shyness 🙈
+                Online aaj kuch zyada hi bol diya maine, pata nahi kya-kya bol gaya... ab aapke saamne face toh nahi kiya jayega.<br>Reason: Shyness 🙈
             </div>
             
-            <textarea id="think-input" rows="2" placeholder="What u think? (Type here)"></textarea>
+            <textarea id="think-input" rows="2" placeholder="What you think? (Type here)"></textarea>
             
-            <div class="box-text" style="margin-bottom:15px; font-weight:600; color:#d4af37;">Btw kal aapke darshan honge kya 😊😊🙏🏻🙏🏻</div>
+            <div class="box-text" style="margin-bottom:15px; font-weight:600; color:#d4af37;">Btw, kal aapke darshan honge kya? 😊😊🙏🏻🙏🏻</div>
             <div class="btn-row">
                 <button class="btn btn-primary" onclick="submitClassEnd('Yes')">Yes</button>
                 <button class="btn" onclick="submitClassEnd('No')">No</button>
@@ -165,7 +174,7 @@
     <!-- Step 10: Gift Request -->
     <div id="step10" class="step-container">
         <div class="glass-box">
-            <div class="box-text">Btw do u want any gift or something u want from me?<br>Plz Write below 🎁</div>
+            <div class="box-text">Btw, do you want any gift or something you want from me?<br>Please write below 🎁</div>
             <textarea id="gift-input" rows="3" placeholder="I want..."></textarea>
             <button class="btn btn-primary" onclick="submitGift()">OK</button>
         </div>
@@ -174,7 +183,7 @@
     <!-- Step 11: Ask Me Anything -->
     <div id="step11" class="step-container">
         <div class="glass-box">
-            <div class="box-text">It's your birthday, enjoy! ✨<br><br>Today you can ask me anything... no limits, I won't mind.</div>
+            <div class="box-text">It's your birthday, enjoy! ✨<br><br>Today you can ask me anything... no limits, I won't mind at all.</div>
             <textarea id="ask-input" rows="3" placeholder="Type your question here..."></textarea>
             <button class="btn btn-primary" onclick="submitAsk()">OK</button>
         </div>
@@ -193,10 +202,10 @@
     <div id="step13" class="step-container">
         <div class="final-text-area">
             <div class="box-text" style="font-size: 15px;">
-                At last i would like to say...<br>Aap bhaut cute ho 🥰<br><br>
-                Yeh face itna shine kaise karta hai, uski tips zaroor dena thoda ✨<br><br>
-                <span style="color:#d4af37; font-weight:bold;">Btw aapko kaise laga yeh wish, I hope u like it.<br>Btw it's a challenge for u, u don't have to use thankyou word in revert reply 😜</span><br><br>
-                Enjoy ur birthday!
+                At last, I would like to say...<br>Aap bahut cute ho 🥰<br><br>
+                Yeh face itna shine kaise karta hai, uski kuch tips zaroor dena thodi ✨<br><br>
+                <span style="color:#d4af37; font-weight:bold;">Btw, aapko yeh wish kaisi lagi? I hope you like it.<br>Btw, it's a challenge for you—you don't have to use the word 'thank you' in your revert reply! 😜</span><br><br>
+                Enjoy your birthday!
             </div>
             <div class="final-hbd">Happy birthday</div>
             <div class="final-hbd" style="font-size: 32px;">Pyari bachi</div>
@@ -232,10 +241,12 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        // Initial tracker state
         db.ref('birthday2026/liveQuotesState').set('Final Story - Reached Step 1');
 
         function nextStep(current, next) {
             document.getElementById('step' + current).classList.remove('active-step');
+            // LIVE TRACKER SYNC TO ADMIN
             db.ref('birthday2026/liveQuotesState').set('Final Story - At Step ' + next);
             setTimeout(() => { document.getElementById('step' + next).classList.add('active-step'); }, 300);
         }
@@ -243,6 +254,7 @@
         // --- Live Response Catchers with Validation ---
         function recordChoice(choice, next) {
             db.ref('birthday2026/userResponses/storyChoice').set(choice);
+            db.ref('birthday2026/liveQuotesState').set('Final Story - At Step ' + next);
             nextStep(1, next);
         }
 
@@ -254,6 +266,7 @@
             }
             db.ref('birthday2026/userResponses/classEndThoughts').set(text);
             db.ref('birthday2026/userResponses/darshanTomorrow').set(darshanResponse);
+            db.ref('birthday2026/liveQuotesState').set('Final Story - At Step 10 (Gift Request)');
             nextStep(9, 10);
         }
 
@@ -264,6 +277,7 @@
                 return;
             }
             db.ref('birthday2026/userResponses/giftRequest').set(text);
+            db.ref('birthday2026/liveQuotesState').set('Final Story - At Step 11 (Ask Anything)');
             nextStep(10, 11);
         }
 
@@ -274,6 +288,7 @@
                 return;
             }
             db.ref('birthday2026/userResponses/askAnything').set(text);
+            db.ref('birthday2026/liveQuotesState').set('Final Story - At Step 12 (Dump Space)');
             nextStep(11, 12);
         }
 
@@ -284,6 +299,7 @@
                 return;
             }
             db.ref('birthday2026/userResponses/dumpSpace').set(text);
+            db.ref('birthday2026/liveQuotesState').set('Final Story - At Step 13 (Final Words)');
             nextStep(12, 13);
         }
 
@@ -304,6 +320,7 @@
         
         function openFinalVideo() {
             document.getElementById('step13').classList.remove('active-step');
+            db.ref('birthday2026/liveQuotesState').set('Final Story - Watching Final Video');
             openVideo('final-vid');
         }
 
@@ -312,10 +329,10 @@
             document.getElementById('video-modal').style.display = 'none';
             
             if(currentVid === 'diwali-vid') {
-                document.getElementById('step4').classList.add('active-step'); // Go to sorry box
+                document.getElementById('step4').classList.add('active-step'); 
                 db.ref('birthday2026/liveQuotesState').set('Final Story - At Step 4 (Sorry Box)');
             } else {
-                document.getElementById('step14').classList.add('active-step'); // Go to END
+                document.getElementById('step14').classList.add('active-step'); 
                 db.ref('birthday2026/liveQuotesState').set('Final Story - THE END');
             }
         }
@@ -326,9 +343,8 @@
         function noMaafiAlert() {
             alert("Arre aise mat karo yaar, aage dekh lo ek baar! 🥺");
             db.ref('birthday2026/liveQuotesState').set('Final Story - Clicked NO MAAFI 😂');
-            nextStep(4, 5); // jump to DP step
+            nextStep(4, 5); 
         }
     </script>
 </body>
-    </html>
-        
+</html>
